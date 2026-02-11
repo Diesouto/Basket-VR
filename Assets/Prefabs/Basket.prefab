@@ -493,7 +493,7 @@ GameObject:
   - component: {fileID: 5006999470407194974}
   - component: {fileID: 4817425918668975269}
   m_Layer: 0
-  m_Name: BallDetection
+  m_Name: BasketDetection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

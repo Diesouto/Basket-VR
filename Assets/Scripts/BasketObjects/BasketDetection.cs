@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Basket : MonoBehaviour
+public class BasketDetection : MonoBehaviour
 {
     [Header("Scoring")]
     public int points = 2; // puntos por encestar
