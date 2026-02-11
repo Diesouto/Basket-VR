@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 [RequireComponent(typeof(CharacterController))]
 public class SimpleFPSPlayer : MonoBehaviour
@@ -29,6 +30,8 @@ public class SimpleFPSPlayer : MonoBehaviour
     private float yVelocity;
     private float xRotation;
 
+    private bool canPlay = false;
+
     void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -44,11 +47,16 @@ public class SimpleFPSPlayer : MonoBehaviour
 
         inputActions.Player.Grab.performed += _ => OnGrabPressed();
         inputActions.Player.Grab.canceled += _ => OnGrabReleased();
+
+        GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
     }
 
     void OnDisable()
     {
         inputActions.Player.Disable();
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnStateChanged -= GameManager_OnStateChanged;
     }
 
     void Start()
@@ -57,8 +65,26 @@ public class SimpleFPSPlayer : MonoBehaviour
         Cursor.visible = false;
     }
 
+    private void GameManager_OnStateChanged(object sender, EventArgs e)
+    {
+        if (GameManager.Instance.IsGamePlaying())
+        {
+            EnablePlayer();
+        }
+        else if (GameManager.Instance.IsGameOver())
+        {
+            DisablePlayerCompletely();
+        }
+        else
+        {
+            DisablePlayerInput();
+        }
+    }
+
     void Update()
     {
+        if (!canPlay) return;
+
         lookInput = inputActions.Player.Look.ReadValue<Vector2>();
 
         HandleMovement();
@@ -79,6 +105,7 @@ public class SimpleFPSPlayer : MonoBehaviour
 
         controller.Move(velocity * Time.deltaTime);
     }
+
     void HandleLook()
     {
         float mouseX = lookInput.x * mouseSensitivity;
@@ -93,14 +120,13 @@ public class SimpleFPSPlayer : MonoBehaviour
 
     void OnGrabPressed()
     {
-        // Si ya tengo pelota no spawneo ni hago raycast a carro
+        if (!canPlay) return;
+
         if (ballGrabber != null && ballGrabber.IsHoldingBall())
             return;
 
-        // Intentar agarrar pelota
         ballGrabber.TryGrab(cameraTransform);
 
-        // Si no hay pelota, intentar interactuar con el carro
         Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, interactDistance, interactLayer))
@@ -113,6 +139,34 @@ public class SimpleFPSPlayer : MonoBehaviour
 
     void OnGrabReleased()
     {
+        if (!canPlay) return;
+
         ballGrabber.Release(cameraTransform);
+    }
+
+    void EnablePlayer()
+    {
+        canPlay = true;
+        controller.enabled = true;
+    }
+
+    void DisablePlayerInput()
+    {
+        canPlay = false;
+        moveInput = Vector2.zero;
+    }
+
+    void DisablePlayerCompletely()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        canPlay = false;
+        moveInput = Vector2.zero;
+
+        controller.enabled = false;
+
+        if (ballGrabber != null && ballGrabber.IsHoldingBall())
+            ballGrabber.Release(cameraTransform);
     }
 }
