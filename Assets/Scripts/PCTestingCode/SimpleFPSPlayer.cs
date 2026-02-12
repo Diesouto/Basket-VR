@@ -38,8 +38,11 @@ public class SimpleFPSPlayer : MonoBehaviour
         inputActions = new InputSystem_Actions();
     }
 
-    void OnEnable()
+    void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         inputActions.Player.Enable();
 
         inputActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
@@ -48,24 +51,10 @@ public class SimpleFPSPlayer : MonoBehaviour
         inputActions.Player.Grab.performed += _ => OnGrabPressed();
         inputActions.Player.Grab.canceled += _ => OnGrabReleased();
 
-        GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
+        GameManager.Instance.OnStateChanged += Player_OnStateChanged;
     }
 
-    void OnDisable()
-    {
-        inputActions.Player.Disable();
-
-        if (GameManager.Instance != null)
-            GameManager.Instance.OnStateChanged -= GameManager_OnStateChanged;
-    }
-
-    void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
-    private void GameManager_OnStateChanged(object sender, EventArgs e)
+    private void Player_OnStateChanged(object sender, EventArgs e)
     {
         if (GameManager.Instance.IsGamePlaying())
         {
@@ -79,6 +68,14 @@ public class SimpleFPSPlayer : MonoBehaviour
         {
             DisablePlayerInput();
         }
+    }
+
+    void OnDisable()
+    {
+        inputActions.Player.Disable();
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnStateChanged -= Player_OnStateChanged;
     }
 
     void Update()
