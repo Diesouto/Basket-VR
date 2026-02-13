@@ -1,4 +1,3 @@
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public static class Loader
@@ -11,20 +10,38 @@ public static class Loader
         LoadingScene
     }
 
-
     static Scene targetScene;
+    static bool isMultiplayer;
+    static bool startAsHost;
 
-
-    public static void LoadScene(Scene targetScene)
+    public static void LoadScene(Scene target)
     {
-        Loader.targetScene = targetScene;
+        isMultiplayer = false;
+        targetScene = target;
 
-        // Pantalla de carga
+        SceneManager.LoadScene(Scene.LoadingScene.ToString());
+    }
+
+    public static void LoadMultiplayer(bool host)
+    {
+        isMultiplayer = true;
+        startAsHost = host;
+
         SceneManager.LoadScene(Scene.LoadingScene.ToString());
     }
 
     public static void LoaderCallback()
     {
-        SceneManager.LoadScene(targetScene.ToString());
+        if (!isMultiplayer)
+        {
+            SceneManager.LoadScene(targetScene.ToString());
+        }
+        else
+        {
+            if (startAsHost)
+                Launcher.StartAsHost();
+            else
+                Launcher.StartAsClient();
+        }
     }
 }

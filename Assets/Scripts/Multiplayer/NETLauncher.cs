@@ -30,18 +30,16 @@ public class Launcher : MonoBehaviour
     {
         if (!NetworkManager.Singleton.IsServer) return;
 
-        Debug.Log("Cliente conectado al servidor: " + clientID);
-
-        // Si el servidor ya ha iniciado, cargamos la escena del juego
-        if (SceneManager.GetActiveScene().name == Loader.Scene.MultiplayerScene.ToString())
-        {
-            NetworkManager.Singleton.SceneManager.LoadScene(Loader.Scene.MultiplayerScene.ToString(), LoadSceneMode.Single);
-        }
+        Debug.Log("Cliente conectado: " + clientID);
     }
 
     void OnServerStarted()
     {
         Debug.Log("Servidor iniciado correctamente.");
-        NetworkManager.Singleton.SceneManager.LoadScene(Loader.Scene.MultiplayerScene.ToString(), LoadSceneMode.Single);
+
+        NetworkManager.Singleton.SceneManager.LoadScene(
+            Loader.Scene.MultiplayerScene.ToString(),
+            LoadSceneMode.Single
+        );
     }
 }

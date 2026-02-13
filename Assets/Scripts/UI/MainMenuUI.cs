@@ -17,15 +17,18 @@ public class MainMenuUI : MonoBehaviour
         playButton.onClick.AddListener(() =>
         {
             Loader.LoadScene(Loader.Scene.GameScene);
-        });
+        }); 
+
         hostButton.onClick.AddListener(() =>
         {
-            Launcher.StartAsHost();
+            Loader.LoadMultiplayer(true);
         });
+
         clientButton.onClick.AddListener(() =>
         {
-            Launcher.StartAsClient();
+            Loader.LoadMultiplayer(false);
         });
+
         quitButton.onClick.AddListener(() =>
         {
             Application.Quit();
