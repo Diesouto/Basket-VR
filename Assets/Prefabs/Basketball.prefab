@@ -185,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e48738efdb02aa447bd01626d9021111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Basketball
-  hasScored: 0
+  timeToDespawn: 10
 --- !u!114 &3272218579942192984
 MonoBehaviour:
   m_ObjectHideFlags: 0

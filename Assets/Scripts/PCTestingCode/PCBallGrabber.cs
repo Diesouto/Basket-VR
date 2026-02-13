@@ -36,8 +36,6 @@ public class PCBallGrabber : MonoBehaviour
         grabbedBall.transform.SetParent(null);
         grabbedBall.linearVelocity = cameraTransform.forward * throwForce;
 
-        Destroy(grabbedBall, 6f);
-
         grabbedBall = null;
     }
 
