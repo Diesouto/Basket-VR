@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Unity.Netcode;
 
 public class GameOver : MonoBehaviour
 {
@@ -23,7 +24,15 @@ public class GameOver : MonoBehaviour
     {
         if (GameManager.Instance.IsGameOver())
         {
-            obtainedPointsText.text = PointsManager.Instance.GetPoints().ToString();
+            int pts = 0;
+            if (PointsManager.Instance != null)
+            {
+                if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
+                    pts = PointsManager.Instance.GetPoints(NetworkManager.Singleton.LocalClientId);
+                else
+                    pts = PointsManager.Instance.GetPoints(0);
+            }
+            obtainedPointsText.text = pts.ToString();
             Show();
         }
         else

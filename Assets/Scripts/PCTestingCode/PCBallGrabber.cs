@@ -9,6 +9,18 @@ public class PCBallGrabber : MonoBehaviour
     public float throwForce = 10f;
 
     private Rigidbody grabbedBall;
+    private bool isFollowingNetworked = false;
+    private NetworkObject heldNetworkObject;
+
+    void Update()
+    {
+        if (isFollowingNetworked && grabbedBall != null && holdPoint != null)
+        {
+            // smoothly follow hold point without changing parent to avoid NetworkObject parent change handling
+            grabbedBall.transform.position = holdPoint.position;
+            grabbedBall.transform.rotation = holdPoint.rotation;
+        }
+    }
 
     public void TryGrab(Transform cameraTransform)
     {
@@ -46,8 +58,22 @@ public class PCBallGrabber : MonoBehaviour
             grabbedBall.linearVelocity = Vector3.zero;
             grabbedBall.angularVelocity = Vector3.zero;
 
-            grabbedBall.transform.SetParent(holdPoint);
-            grabbedBall.transform.localPosition = Vector3.zero;
+            var netObjParent = rb.GetComponent<NetworkObject>();
+            if (netObjParent != null)
+            {
+                // For networked objects, avoid SetParent which triggers NetworkObject parent-change handling
+                isFollowingNetworked = true;
+                heldNetworkObject = netObjParent;
+
+                // make physics kinematic while held
+                if (grabbedBall != null) grabbedBall.isKinematic = true;
+            }
+            else
+            {
+                // local/non-network object: safe to parent
+                grabbedBall.transform.SetParent(holdPoint);
+                grabbedBall.transform.localPosition = Vector3.zero;
+            }
         }
     }
 
@@ -57,38 +83,39 @@ public class PCBallGrabber : MonoBehaviour
 
         NetworkObject netObj = grabbedBall.GetComponent<NetworkObject>();
 
-        bool canUnparent = true;
-        if (netObj != null)
-        {
-            if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
-            {
-                // only unparent if this client owns the networked object and it's spawned
-                canUnparent = netObj.IsSpawned && netObj.OwnerClientId == NetworkManager.Singleton.LocalClientId;
-            }
-            else
-            {
-                // networking not active (single-player), allow unparent
-                canUnparent = true;
-            }
-        }
+        bool networkActive = NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening;
 
-        if (canUnparent)
+        if (netObj != null && isFollowingNetworked)
         {
-            try
+            // stop following, enable physics and set velocity
+            isFollowingNetworked = false;
+            heldNetworkObject = null;
+            if (grabbedBall != null)
             {
-                grabbedBall.transform.SetParent(null);
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogWarning($"Failed to unparent grabbed ball safely: {ex.Message}");
+                grabbedBall.isKinematic = false;
+                grabbedBall.linearVelocity = cameraTransform.forward * throwForce;
             }
         }
         else
         {
-            Debug.Log("Release: not unparenting networked ball we don't own or that isn't spawned.");
-        }
+            // non-networked or networked but not following: try to unparent if safe
+            bool canUnparent = true;
+            if (netObj != null && networkActive)
+            {
+                canUnparent = netObj.IsSpawned && netObj.OwnerClientId == NetworkManager.Singleton.LocalClientId;
+            }
 
-        grabbedBall.linearVelocity = cameraTransform.forward * throwForce;
+            if (canUnparent)
+            {
+                try { grabbedBall.transform.SetParent(null); } catch (System.Exception ex) { Debug.LogWarning($"Failed to unparent grabbed ball safely: {ex.Message}"); }
+            }
+            else
+            {
+                Debug.Log("Release: not unparenting networked ball we don't own or that isn't spawned.");
+            }
+
+            if (grabbedBall != null) grabbedBall.linearVelocity = cameraTransform.forward * throwForce;
+        }
 
         grabbedBall = null;
     }

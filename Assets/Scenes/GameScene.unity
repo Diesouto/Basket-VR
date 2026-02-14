@@ -2440,6 +2440,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1290302523}
+  - component: {fileID: 1290302525}
   - component: {fileID: 1290302524}
   m_Layer: 0
   m_Name: PointsManager
@@ -2475,7 +2476,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90cb21f1d1d9d704ba2bc624386c06fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PointsManager
+  ShowTopMostFoldoutHeaderGroup: 1
   pointsPerBasket: 2
+--- !u!114 &1290302525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290302522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1193824960
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &1355528788
 GameObject:
   m_ObjectHideFlags: 0
@@ -3791,7 +3818,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   waitingToStartTimer: 1
   countdownToStartTimer: 3
-  gamePlayingTimerMax: 300
+  gamePlayingTimerMax: 20
 --- !u!1001 &790142677254972988
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3883,7 +3910,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 873442879778975037, guid: e97016bac28d8dd4f980eb1c30d1faa3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.6355343
+      value: 0.51
       objectReference: {fileID: 0}
     - target: {fileID: 873442879778975037, guid: e97016bac28d8dd4f980eb1c30d1faa3, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3891,23 +3918,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 873442879778975037, guid: e97016bac28d8dd4f980eb1c30d1faa3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.71694386
+      value: 0.9028009
       objectReference: {fileID: 0}
     - target: {fileID: 873442879778975037, guid: e97016bac28d8dd4f980eb1c30d1faa3, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.66523045
+      value: -0.0038009842
       objectReference: {fileID: 0}
     - target: {fileID: 873442879778975037, guid: e97016bac28d8dd4f980eb1c30d1faa3, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 873442879778975037, guid: e97016bac28d8dd4f980eb1c30d1faa3, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.7466381
+      value: -0.9999928
       objectReference: {fileID: 0}
     - target: {fileID: 873442879778975037, guid: e97016bac28d8dd4f980eb1c30d1faa3, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 873442879778975037, guid: e97016bac28d8dd4f980eb1c30d1faa3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3915,7 +3942,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 873442879778975037, guid: e97016bac28d8dd4f980eb1c30d1faa3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 179.564
       objectReference: {fileID: 0}
     - target: {fileID: 873442879778975037, guid: e97016bac28d8dd4f980eb1c30d1faa3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

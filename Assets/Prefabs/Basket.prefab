@@ -603,6 +603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf7edbe7d2ac84f4d93c0bfcd8921915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Basket
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &9112403417391986036
 GameObject:
   m_ObjectHideFlags: 0
@@ -612,8 +613,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1476650536087955894}
-  - component: {fileID: 7646213787277447711}
   - component: {fileID: 8568263029873898598}
+  - component: {fileID: 7646213787277447711}
   - component: {fileID: 4454754020949711800}
   m_Layer: 0
   m_Name: Basket
@@ -640,27 +641,6 @@ Transform:
   - {fileID: 917132680501846105}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7646213787277447711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9112403417391986036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9454a17dd6e71e34e8c4468b8db7f834, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Basket
-  maxSizeIncreaseAmount: 0.5
-  maxMoveSpeedIncreaseAmount: 2
-  minEventsDuration: 5
-  maxEventsDuration: 10
-  minEventCooldownTime: 5
-  maxEventCooldownTime: 10
-  targetReachThreshold: 0.1
-  shakeIntensity: 0.2
-  movementBoundsSize: {x: 5, y: 3, z: 5}
 --- !u!114 &8568263029873898598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -673,7 +653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 0
+  GlobalObjectIdHash: 3135670814
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -686,6 +666,28 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &7646213787277447711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9112403417391986036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9454a17dd6e71e34e8c4468b8db7f834, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Basket
+  ShowTopMostFoldoutHeaderGroup: 1
+  maxSizeIncreaseAmount: 0.5
+  maxMoveSpeedIncreaseAmount: 2
+  minEventsDuration: 5
+  maxEventsDuration: 10
+  minEventCooldownTime: 5
+  maxEventCooldownTime: 10
+  targetReachThreshold: 0.1
+  shakeIntensity: 0.2
+  movementBoundsSize: {x: 5, y: 3, z: 5}
 --- !u!114 &4454754020949711800
 MonoBehaviour:
   m_ObjectHideFlags: 0

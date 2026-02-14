@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
+using Unity.Netcode;
 using Random = UnityEngine.Random;
 
-public class Basket : MonoBehaviour
+public class Basket : NetworkBehaviour
 {
     enum BasketEventType
     {
@@ -16,10 +17,10 @@ public class Basket : MonoBehaviour
     [Header("Basket Settings")]
     [SerializeField] float maxSizeIncreaseAmount = 0.5f;        // Mayor escalado posible de la canasta
     [SerializeField] float maxMoveSpeedIncreaseAmount = 2f;   // Mayor aumento de velocidad de movimiento posible de la canasta
-    [SerializeField] float minEventsDuration = 5f;              // Duración mínima de los eventos posibles de la canasta
-    [SerializeField] float maxEventsDuration = 10f;             // Duración máxima de los eventos posibles de la canasta
-    [SerializeField] float minEventCooldownTime = 5f;          // Duración mínima entre eventos posibles de la canasta
-    [SerializeField] float maxEventCooldownTime = 10f;         // Duración máxima entre eventos posibles de la canasta
+    [SerializeField] float minEventsDuration = 5f;              // Duraciï¿½n mï¿½nima de los eventos posibles de la canasta
+    [SerializeField] float maxEventsDuration = 10f;             // Duraciï¿½n mï¿½xima de los eventos posibles de la canasta
+    [SerializeField] float minEventCooldownTime = 5f;          // Duraciï¿½n mï¿½nima entre eventos posibles de la canasta
+    [SerializeField] float maxEventCooldownTime = 10f;         // Duraciï¿½n mï¿½xima entre eventos posibles de la canasta
     [SerializeField] float targetReachThreshold = 0.1f;         // Distancia a la que la canasta se considera que ha llegado a su objetivo de movimiento
     [SerializeField] float shakeIntensity = 0.2f;               // Intensidad del temblor de la canasta
 
@@ -35,15 +36,32 @@ public class Basket : MonoBehaviour
     float cooldownTimer;
     float moveSpeed;
 
-    void Start()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+
         isPlaying = false;
         initialPosition = transform.position;
         initialScale = transform.localScale;
 
         SetCooldown();
 
-        GameManager.Instance.OnStateChanged += Basket_OnStateChanged;
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnStateChanged += Basket_OnStateChanged;
+    }
+
+    void Start()
+    {
+        // If networking is not active, initialize normally so single-player runs basket events
+        if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening)
+        {
+            isPlaying = false;
+            initialPosition = transform.position;
+            initialScale = transform.localScale;
+            SetCooldown();
+            if (GameManager.Instance != null)
+                GameManager.Instance.OnStateChanged += Basket_OnStateChanged;
+        }
     }
 
     private void Basket_OnStateChanged(object sender, System.EventArgs e)
@@ -53,6 +71,9 @@ public class Basket : MonoBehaviour
 
     void Update()
     {
+        // Only the server decides basket events and moves the basket; in single-player (no networking) run locally.
+        bool networkActive = NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening;
+        if (networkActive && !IsServer) return;
         if (!isPlaying) return;
 
         if (currentEvent == BasketEventType.None)
@@ -125,7 +146,7 @@ public class Basket : MonoBehaviour
 
     #region Eventos de la canasta
 
-    // Aumenta el tamaño de la canasta de forma aleatoria, hasta el máximo permitido
+    // Aumenta el tamaï¿½o de la canasta de forma aleatoria, hasta el mï¿½ximo permitido
     void IncreaseSize()
     {
         float increaseAmount = Random.Range(0f, maxSizeIncreaseAmount);
@@ -154,7 +175,7 @@ public class Basket : MonoBehaviour
 
     void StartShake()
     {
-        moveSpeed = Random.Range(5f, 10f); // rápido
+        moveSpeed = Random.Range(5f, 10f); // rï¿½pido
     }
 
     void HandleShake()
@@ -163,7 +184,7 @@ public class Basket : MonoBehaviour
         transform.position = initialPosition + randomOffset;
     }
 
-    // Teletransporta la canasta a una posición aleatoria dentro de un área determinada
+    // Teletransporta la canasta a una posiciï¿½n aleatoria dentro de un ï¿½rea determinada
     void Teleport()
     {
         transform.position = GetRandomPointInBounds();

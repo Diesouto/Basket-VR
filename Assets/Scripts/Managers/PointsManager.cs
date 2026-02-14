@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PointsManager : MonoBehaviour
+public class PointsManager : NetworkBehaviour
 {
     public static PointsManager Instance { get; private set; }
 
@@ -9,7 +11,8 @@ public class PointsManager : MonoBehaviour
 
     [SerializeField] private int pointsPerBasket = 2;
 
-    private int currentPoints = 0;
+    // local cache of points per client
+    private Dictionary<ulong, int> pointsPerClient = new Dictionary<ulong, int>();
 
     private void Awake()
     {
@@ -22,22 +25,72 @@ public class PointsManager : MonoBehaviour
         Instance = this;
     }
 
-    public void AddBasketPoints()
+    public void AddBasketPointsForClient(ulong clientId)
     {
-        currentPoints += pointsPerBasket;
+        // Allow single-player local updates when networking is not active.
+        bool networkingActive = NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening;
+        if (networkingActive && !IsServer)
+        {
+            Debug.LogWarning("AddBasketPointsForClient should be called on server.");
+            return;
+        }
+
+        if (!pointsPerClient.ContainsKey(clientId))
+            pointsPerClient[clientId] = 0;
+
+        pointsPerClient[clientId] += pointsPerBasket;
+        int newPoints = pointsPerClient[clientId];
+
+        if (networkingActive)
+        {
+            // notify all clients about updated points for this client
+            Debug.Log($"PointsManager: awarding {pointsPerBasket} to {clientId}, total {newPoints} (networked)");
+            UpdateClientPointsClientRpc(clientId, newPoints);
+        }
+        else
+        {
+            // single-player: invoke local event so UI updates
+            Debug.Log($"PointsManager: awarding {pointsPerBasket} to {clientId}, total {newPoints} (local)");
+            OnPointsChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    // Single-player fallback
+    public void AddBasketPointsLocal()
+    {
+        // Treat local player as client 0
+        AddBasketPointsForClient(0);
+    }
+
+    [ClientRpc]
+    void UpdateClientPointsClientRpc(ulong clientId, int newPoints, ClientRpcParams clientRpcParams = default)
+    {
+        pointsPerClient[clientId] = newPoints;
         OnPointsChanged?.Invoke(this, EventArgs.Empty);
-
-        Debug.Log("Total Points: " + currentPoints);
     }
 
-    public int GetPoints()
+    public int GetPoints(ulong clientId)
     {
-        return currentPoints;
+        if (pointsPerClient.TryGetValue(clientId, out int val)) return val;
+        return 0;
     }
 
-    public void ResetPoints()
+    public Dictionary<ulong,int> GetAllPoints()
     {
-        currentPoints = 0;
+        return new Dictionary<ulong,int>(pointsPerClient);
+    }
+
+    public void ResetAllPoints()
+    {
+        if (!IsServer) return;
+        pointsPerClient.Clear();
+        UpdateAllClientsResetClientRpc();
+    }
+
+    [ClientRpc]
+    void UpdateAllClientsResetClientRpc(ClientRpcParams clientRpcParams = default)
+    {
+        pointsPerClient.Clear();
         OnPointsChanged?.Invoke(this, EventArgs.Empty);
     }
 }
