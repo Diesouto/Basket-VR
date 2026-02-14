@@ -14,7 +14,7 @@ public class NETThrow : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
     void Throw_ServerRPC()
     {
         GameObject tomato = Instantiate(tomatoPrefab, transform.position + transform.forward * 2, Quaternion.identity);

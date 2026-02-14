@@ -5,7 +5,7 @@ public class Basketball : MonoBehaviour
     [SerializeField] float timeToDespawn = 6f;
 
     bool hasScored = false;
-    BasketballCart cart;
+    IBasketballOwner owner;
 
     void OnEnable()
     {
@@ -17,9 +17,9 @@ public class Basketball : MonoBehaviour
         CancelInvoke();
     }
 
-    public void Initialize(BasketballCart ownerCart)
+    public void Initialize(IBasketballOwner ownerCart)
     {
-        cart = ownerCart;
+        owner = ownerCart;
     }
 
     public bool GetHasScored()
@@ -43,12 +43,12 @@ public class Basketball : MonoBehaviour
 
     public void ReturnToPool()
     {
-        if (cart == null)
+        if (owner == null)
         {
-            Debug.LogWarning("Ball has no cart reference.");
+            Debug.LogWarning("Ball has no cart/owner reference.");
             return;
         }
 
-        cart.ReturnBall(this);
+        owner.ReturnBall(this);
     }
 }

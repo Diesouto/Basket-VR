@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasketballCart : MonoBehaviour
+public class BasketballCart : MonoBehaviour, IBasketballOwner
 {
     [Header("Ball")]
     [SerializeField] GameObject basketballPrefab;
@@ -41,7 +41,7 @@ public class BasketballCart : MonoBehaviour
         if (ballPool.Count == 0)
         {
             Debug.Log("TODAVIA NO HAY PELOTAS");
-            return; // @TODO: opcional expandir pool dinámicamente
+            return; // @TODO: opcional expandir pool dinï¿½micamente
         }
 
         lastSpawnTime = Time.time;
