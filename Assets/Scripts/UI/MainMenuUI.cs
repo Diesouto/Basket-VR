@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ public class MainMenuUI : MonoBehaviour
 
     private void Awake()
     {
-        // Nos aseguramos de que el juego no esté pausado al cargar el menú principal
+        // Nos aseguramos de que el juego no estï¿½ pausado al cargar el menï¿½ principal
         Time.timeScale = 1f;
 
         playButton.onClick.AddListener(() =>
@@ -22,11 +23,15 @@ public class MainMenuUI : MonoBehaviour
         hostButton.onClick.AddListener(() =>
         {
             Loader.LoadMultiplayer(true);
+
+            //NetworkManager.Singleton.SceneManager.LoadScene(Loader.Scene.MultiplayerScene.ToString(), LoadSceneMode.Single);
         });
 
         clientButton.onClick.AddListener(() =>
         {
             Loader.LoadMultiplayer(false);
+
+            //NetworkManager.Singleton.SceneManager.LoadScene(Loader.Scene.MultiplayerScene.ToString(), LoadSceneMode.Single);
         });
 
         quitButton.onClick.AddListener(() =>

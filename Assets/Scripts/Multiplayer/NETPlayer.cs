@@ -1,44 +1,138 @@
 using UnityEngine;
 using Unity.Netcode;
+// Prefer the new Input System when available
+using UnityEngine.InputSystem;
 
 public class NETPlayer : NetworkBehaviour
 {
     [Header("References")]
     public Transform holdPoint;
+    public Camera playerCamera;
 
     [Header("Grab")]
     public LayerMask ballLayer;
     public float grabDistance = 3f;
+    [Header("Interact")]
+    public LayerMask interactLayer;
 
     Rigidbody heldRb;
+    InputSystem_Actions inputActions;
 
     void Update()
     {
         if (!IsOwner) return;
-
-        // Simple PC input for testing
-        if (Input.GetKeyDown(KeyCode.E))
-            TryLocalGrab();
-
-        if (Input.GetKeyDown(KeyCode.Q))
-            TryLocalRelease();
     }
 
-    void TryLocalGrab()
+    public override void OnNetworkSpawn()
     {
-        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+        base.OnNetworkSpawn();
+        // enable camera only for the owner
+        if (playerCamera != null)
+        {
+            playerCamera.enabled = IsOwner;
+        }
+
+        // Only the owner needs input handling
+        if (IsOwner)
+        {
+            inputActions = new InputSystem_Actions();
+            inputActions.Player.Enable();
+            inputActions.Player.Grab.performed += OnGrabPerformed;
+            inputActions.Player.Grab.canceled += OnGrabCanceled;
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        if (playerCamera != null)
+            playerCamera.enabled = false;
+
+        if (inputActions != null)
+        {
+            inputActions.Player.Grab.performed -= OnGrabPerformed;
+            inputActions.Player.Grab.canceled -= OnGrabCanceled;
+            inputActions.Player.Disable();
+            inputActions = null;
+        }
+    }
+
+    void OnGrabPerformed(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        if (!IsOwner) return;
+
+        // First try to grab a ball. If that didn't hit anything, try interacting (e.g., spawn from cart).
+        if (TryLocalGrab()) return;
+
+        TryLocalInteract();
+    }
+
+    void OnGrabCanceled(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        if (!IsOwner) return;
+        TryLocalRelease();
+    }
+
+    bool TryLocalGrab()
+    {
+        Camera cam = playerCamera != null ? playerCamera : Camera.main;
+        if (cam == null) return false;
+
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, grabDistance, ballLayer))
         {
-            var netObj = hit.collider.GetComponent<NetworkObject>();
-            if (netObj == null) return;
+            // Ensure we hit a physics body (balls should have a Rigidbody)
+            Rigidbody hitRb = hit.rigidbody != null ? hit.rigidbody : hit.collider.GetComponent<Rigidbody>();
+            if (hitRb == null) return false;
+
+            var netObj = hitRb.GetComponent<NetworkObject>();
+            if (netObj == null) return false;
             RequestGrabServerRpc(netObj.NetworkObjectId, NetworkManager.Singleton.LocalClientId);
+            return true;
+        }
+
+        return false;
+    }
+
+    void TryLocalInteract()
+    {
+        Camera cam = playerCamera != null ? playerCamera : Camera.main;
+        if (cam == null) return;
+
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        RaycastHit hit;
+        bool didHit = false;
+        if (interactLayer.value == 0)
+        {
+            didHit = Physics.Raycast(ray, out hit, grabDistance);
+        }
+        else
+        {
+            didHit = Physics.Raycast(ray, out hit, grabDistance, interactLayer);
+        }
+
+        if (!didHit)
+        {
+            Debug.Log("NETPlayer.TryLocalInteract: no hit");
+            return;
+        }
+
+        Debug.Log($"NETPlayer.TryLocalInteract: hit {hit.collider.name} (layer {hit.collider.gameObject.layer})");
+        var cart = hit.collider.GetComponentInParent<NETBasketballCart>();
+        if (cart != null)
+        {
+            Debug.Log($"NETPlayer: requesting spawn from cart {cart.name}");
+            cart.RequestSpawnServerRpc();
         }
     }
 
     void TryLocalRelease()
     {
         if (heldRb == null) return;
-        Vector3 relVel = Camera.main.transform.forward * 8f;
+        Camera cam = playerCamera != null ? playerCamera : Camera.main;
+        if (cam == null) return;
+
+        Vector3 relVel = cam.transform.forward * 8f;
         RequestReleaseServerRpc(heldRb.GetComponent<NetworkObject>().NetworkObjectId, relVel, NetworkManager.Singleton.LocalClientId);
     }
 
@@ -68,9 +162,15 @@ public class NETPlayer : NetworkBehaviour
         if (!IsOwner) return;
         if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(ballNetId)) return;
         var go = NetworkManager.Singleton.SpawnManager.SpawnedObjects[ballNetId].gameObject;
-        heldRb = go.GetComponent<Rigidbody>();
-        heldRb.transform.SetParent(holdPoint);
-        heldRb.transform.localPosition = Vector3.zero;
+        var rb = go.GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            Debug.LogWarning($"GrabbedClientRpc: spawned object {go.name} has no Rigidbody; ignoring grab.");
+            return;
+        }
+
+        heldRb = rb;
+        try { heldRb.transform.SetParent(holdPoint); heldRb.transform.localPosition = Vector3.zero; } catch { }
     }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]

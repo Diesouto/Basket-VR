@@ -7,6 +7,7 @@ public class GamePlayingClockUI : MonoBehaviour
 
     private void Update()
     {
-        timerImage.fillAmount = GameManager.Instance.GetGamePlayingTimerNormalized();
+        if (timerImage)
+            timerImage.fillAmount = GameManager.Instance.GetGamePlayingTimerNormalized();
     }
 }

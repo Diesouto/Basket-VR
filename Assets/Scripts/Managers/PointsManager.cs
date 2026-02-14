@@ -25,6 +25,55 @@ public class PointsManager : NetworkBehaviour
         Instance = this;
     }
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        // Only the server tracks connected clients and initializes their points
+        if (IsServer && NetworkManager.Singleton != null)
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+
+            // initialize current connected clients
+            foreach (var kv in NetworkManager.Singleton.ConnectedClients)
+            {
+                ulong clientId = kv.Key;
+                if (!pointsPerClient.ContainsKey(clientId))
+                    pointsPerClient[clientId] = 0;
+            }
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        if (IsServer && NetworkManager.Singleton != null)
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
+        }
+    }
+
+    private void OnClientConnected(ulong clientId)
+    {
+        if (!IsServer) return;
+        if (!pointsPerClient.ContainsKey(clientId))
+            pointsPerClient[clientId] = 0;
+
+        // inform clients about the new (zero) points for this client
+        UpdateClientPointsClientRpc(clientId, 0);
+    }
+
+    private void OnClientDisconnected(ulong clientId)
+    {
+        if (!IsServer) return;
+        // set disconnected client's points to 0 so clients don't show stale values
+        if (pointsPerClient.ContainsKey(clientId))
+            pointsPerClient[clientId] = 0;
+        UpdateClientPointsClientRpc(clientId, 0);
+    }
+
     public void AddBasketPointsForClient(ulong clientId)
     {
         // Allow single-player local updates when networking is not active.

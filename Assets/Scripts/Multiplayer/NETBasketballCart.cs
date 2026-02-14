@@ -15,6 +15,7 @@ public class NETBasketballCart : NetworkBehaviour, IBasketballOwner
     public void RequestSpawnServerRpc()
     {
         if (!IsServer) return;
+        Debug.Log($"NETBasketballCart.RequestSpawnServerRpc: spawn requested on server (cart={name})");
         TrySpawnBall();
     }
 
@@ -22,8 +23,13 @@ public class NETBasketballCart : NetworkBehaviour, IBasketballOwner
     public void TrySpawnBall()
     {
         if (!IsServer) return;
-        if (Time.time - lastSpawnTime < spawnCooldown) return;
+        if (Time.time - lastSpawnTime < spawnCooldown)
+        {
+            Debug.Log("NETBasketballCart.TrySpawnBall: cooldown active");
+            return;
+        }
         lastSpawnTime = Time.time;
+        Debug.Log("NETBasketballCart.TrySpawnBall: spawning ball now");
         SpawnBall();
     }
 
@@ -35,6 +41,7 @@ public class NETBasketballCart : NetworkBehaviour, IBasketballOwner
             return;
         }
 
+        Debug.Log($"NETBasketballCart.SpawnBall: instantiating prefab {basketballPrefab.name}");
         GameObject go = Instantiate(basketballPrefab.gameObject, spawnPoint.position, spawnPoint.rotation);
         NetworkObject netObj = go.GetComponent<NetworkObject>();
         if (netObj == null)

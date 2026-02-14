@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] float waitingToStartTimer = 1f;
     [SerializeField] float countdownToStartTimer = 3f;
     [SerializeField] float gamePlayingTimerMax = 10f;
+    [Header("Multiplayer")]
+    [Tooltip("Minimum number of connected players required to start the countdown when running as server")] 
+    [SerializeField] int minPlayersToStart = 2;
 
     enum State
     {
@@ -43,6 +46,18 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case State.WaitingToStart:
+                // In multiplayer server mode, don't countdown until enough players are connected
+                bool networkServer = Unity.Netcode.NetworkManager.Singleton != null && Unity.Netcode.NetworkManager.Singleton.IsServer;
+                if (networkServer)
+                {
+                    int connected = Unity.Netcode.NetworkManager.Singleton.ConnectedClients.Count;
+                    if (connected < minPlayersToStart)
+                    {
+                        // keep waiting
+                        break;
+                    }
+                }
+
                 waitingToStartTimer -= Time.deltaTime;
                 if (waitingToStartTimer < 0f)
                 {

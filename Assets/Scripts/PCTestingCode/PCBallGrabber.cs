@@ -55,8 +55,8 @@ public class PCBallGrabber : MonoBehaviour
             }
 
             grabbedBall = rb;
-            grabbedBall.linearVelocity = Vector3.zero;
-            grabbedBall.angularVelocity = Vector3.zero;
+            //grabbedBall.linearVelocity = Vector3.zero;
+            //grabbedBall.angularVelocity = Vector3.zero;
 
             var netObjParent = rb.GetComponent<NetworkObject>();
             if (netObjParent != null)
