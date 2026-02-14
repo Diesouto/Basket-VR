@@ -32,28 +32,61 @@ public class NETPlayerSpawner : MonoBehaviour
 
     System.Collections.IEnumerator AssignSpawnCoroutine(ulong clientId)
     {
-        yield return null; // wait one frame
+        // wait several frames to allow the PlayerObject to be created by Netcode
+        int attempts = 0;
+        const int maxAttempts = 30;
+        while (attempts < maxAttempts)
+        {
+            if (!NetworkManager.Singleton.ConnectedClients.ContainsKey(clientId)) yield break;
+            var client = NetworkManager.Singleton.ConnectedClients[clientId];
+            var playerObj = client.PlayerObject;
+            if (playerObj != null)
+            {
+                Debug.Log($"NETPlayerSpawner: AssignSpawnCoroutine client {clientId}, playerObj exists after {attempts} frames, connectedClients={NetworkManager.Singleton.ConnectedClients.Count}");
+                break;
+            }
+            attempts++;
+            yield return null;
+        }
 
         if (!NetworkManager.Singleton.ConnectedClients.ContainsKey(clientId)) yield break;
-        var client = NetworkManager.Singleton.ConnectedClients[clientId];
-        var playerObj = client.PlayerObject;
-        Debug.Log($"NETPlayerSpawner: AssignSpawnCoroutine client {clientId}, playerObj={(playerObj==null?"null":"exists")}, connectedClients={NetworkManager.Singleton.ConnectedClients.Count}");
-        if (playerObj == null)
+        var clientAfter = NetworkManager.Singleton.ConnectedClients[clientId];
+        var playerObjAfter = clientAfter.PlayerObject;
+        if (playerObjAfter == null)
         {
-            Debug.LogError($"NETPlayerSpawner: PlayerObject is null for client {clientId}. Ensure NetworkManager.Player Prefab is assigned or set a fallbackPlayerPrefab on NETPlayerSpawner.");
+            Debug.LogError($"NETPlayerSpawner: PlayerObject is still null for client {clientId} after waiting. Ensure NetworkManager.Player Prefab is assigned or set a fallbackPlayerPrefab on NETPlayerSpawner.");
             yield break;
         }
 
         if (spawnPoints == null || spawnPoints.Length == 0) yield break;
 
         int index = (int)(clientId % (ulong)spawnPoints.Length);
-        playerObj.transform.position = spawnPoints[index].position;
-        playerObj.transform.rotation = spawnPoints[index].rotation;
+        playerObjAfter.transform.position = spawnPoints[index].position;
+        playerObjAfter.transform.rotation = spawnPoints[index].rotation;
     }
 
     System.Collections.IEnumerator AssignExistingClientsNextFrame()
     {
-        yield return null; // wait one frame so PlayerObjects are created
+        // wait a few frames so PlayerObjects are created
+        const int maxAttempts = 30;
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            if (NetworkManager.Singleton == null) yield break;
+
+            bool allHave = true;
+            foreach (var kv in NetworkManager.Singleton.ConnectedClients)
+            {
+                var client = kv.Value;
+                if (client.PlayerObject == null)
+                {
+                    allHave = false;
+                    break;
+                }
+            }
+
+            if (allHave) break;
+            yield return null;
+        }
 
         if (NetworkManager.Singleton == null) yield break;
 
@@ -64,15 +97,19 @@ public class NETPlayerSpawner : MonoBehaviour
             var playerObj = client.PlayerObject;
             Debug.Log($"NETPlayerSpawner: existing client {clientId}, playerObj={(playerObj==null?"null":"exists")}");
 
-            if (playerObj == null && fallbackPlayerPrefab != null && NetworkManager.Singleton.IsServer)
+            if (playerObj == null && NetworkManager.Singleton.IsServer)
             {
-                Debug.Log($"NETPlayerSpawner: spawning fallback player prefab for client {clientId}");
-                var go = Instantiate(fallbackPlayerPrefab.gameObject, Vector3.zero, Quaternion.identity);
-                var netObj = go.GetComponent<NetworkObject>();
-                if (netObj != null)
+                // Try explicit fallback prefab on spawner first
+                if (fallbackPlayerPrefab != null)
                 {
-                    netObj.SpawnAsPlayerObject(clientId, true);
-                    playerObj = netObj;
+                    Debug.Log($"NETPlayerSpawner: spawning fallbackPlayerPrefab for client {clientId}");
+                    var go = Instantiate(fallbackPlayerPrefab.gameObject, Vector3.zero, Quaternion.identity);
+                    var netObj = go.GetComponent<NetworkObject>();
+                    if (netObj != null)
+                    {
+                        netObj.SpawnAsPlayerObject(clientId, true);
+                        playerObj = netObj;
+                    }
                 }
             }
 
