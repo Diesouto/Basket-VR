@@ -5,7 +5,8 @@ using Unity.Netcode;
 
 public class GamePointsUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI pointsText;
+    [SerializeField] private TextMeshProUGUI playerPointsText;
+    [SerializeField] private TextMeshProUGUI rivalPointsText;
 
     private void Start()
     {
@@ -34,39 +35,19 @@ public class GamePointsUI : MonoBehaviour
 
     private void UpdatePoints()
     {
-        if (pointsText == null) return;
+        if (playerPointsText == null) return;
 
         // Single-player fallback
         if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening)
         {
             int pts = 0;
-            if (PointsManager.Instance != null) pts = PointsManager.Instance.GetPoints(0);
-            pointsText.text = $"Points: {pts}";
+            if (PointsManager.Instance != null) pts = PointsManager.Instance.GetPlayerPoints(0);
+            playerPointsText.text = $"Points: {pts}";
             return;
         }
 
-        ulong localId = NetworkManager.Singleton.LocalClientId;
-
-        if (PointsManager.Instance == null)
-        {
-            pointsText.text = "Points: 0";
-            return;
-        }
-
-        var all = PointsManager.Instance.GetAllPoints();
-
-        int localPts = 0;
-        all.TryGetValue(localId, out localPts);
-
-        // If there are other clients, show their points too
-        string display = $"You: {localPts}";
-        foreach (var kv in all)
-        {
-            if (kv.Key == localId) continue;
-            display += $"  |  Opponent({kv.Key}): {kv.Value}";
-        }
-
-        pointsText.text = display;
+        playerPointsText.text = $"You: {PointsManager.Instance.GetPlayerPoints().ToString()}";
+        rivalPointsText.text = $"Rival: {PointsManager.Instance.GetRivalPoints().ToString()}";
     }
 
     private void GameManager_OnStateChanged(object sender, System.EventArgs e)

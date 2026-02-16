@@ -2824,7 +2824,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46bccf7e83fb1764ea1086b093818edd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GamePointsUI
-  pointsText: {fileID: 1919595080}
+  playerPointsText: {fileID: 1919595080}
+  rivalPointsText: {fileID: 0}
 --- !u!1 &1457131158
 GameObject:
   m_ObjectHideFlags: 0
@@ -3770,7 +3771,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46914d65612089549a82d2adc9d150e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameOver
-  obtainedPointsText: {fileID: 845784610}
+  playerObtainedPointsText: {fileID: 845784610}
+  rivalObtainedPointsText: {fileID: 0}
   returnToMainMenuButton: {fileID: 148152667}
 --- !u!1 &2145162916
 GameObject:
@@ -3819,6 +3821,7 @@ MonoBehaviour:
   waitingToStartTimer: 1
   countdownToStartTimer: 3
   gamePlayingTimerMax: 20
+  minPlayersToStart: 2
 --- !u!1001 &790142677254972988
 PrefabInstance:
   m_ObjectHideFlags: 0

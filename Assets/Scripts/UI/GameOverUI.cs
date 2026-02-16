@@ -1,18 +1,21 @@
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
-using Unity.Netcode;
 
 public class GameOver : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI obtainedPointsText;
+    [SerializeField] private TextMeshProUGUI playerObtainedPointsText;
+    [SerializeField] private TextMeshProUGUI rivalObtainedPointsText;
     [SerializeField] private Button returnToMainMenuButton;
 
     private void Start()
     {
         returnToMainMenuButton.onClick.AddListener(() =>
         {
+            Launcher.ShutdownNetwork();
             SceneManager.LoadScene(Loader.Scene.MainMenuScene.ToString());
         });
 
@@ -24,21 +27,32 @@ public class GameOver : MonoBehaviour
     {
         if (GameManager.Instance.IsGameOver())
         {
-            int pts = 0;
-            if (PointsManager.Instance != null)
+            if (Launcher.isMultiplayer)
             {
-                if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
-                    pts = PointsManager.Instance.GetPoints(NetworkManager.Singleton.LocalClientId);
-                else
-                    pts = PointsManager.Instance.GetPoints(0);
+                MultiplayerGameOver();
+            } else
+            {
+                SinglePlayerGameOver();
             }
-            obtainedPointsText.text = pts.ToString();
-            Show();
         }
         else
         {
             Hide();
         }
+    }
+
+    private void SinglePlayerGameOver()
+    {
+        playerObtainedPointsText.text = PointsManager.Instance.GetPlayerPoints(0).ToString();
+        Show();
+    }
+
+    private void MultiplayerGameOver()
+    {
+        playerObtainedPointsText.text = PointsManager.Instance.GetPlayerPoints().ToString();
+        rivalObtainedPointsText.text = PointsManager.Instance.GetRivalPoints().ToString();
+
+        Show();
     }
 
     void Show()

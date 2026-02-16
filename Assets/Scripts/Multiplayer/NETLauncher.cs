@@ -10,6 +10,8 @@ using Unity.Netcode.Transports.UTP;
 [RequireComponent(typeof(UnityTransport))]
 public class Launcher : MonoBehaviour
 {
+    public static bool isMultiplayer = false;
+
     void Start()
     {
         // Escuchamos cuando un cliente se conecta
@@ -22,18 +24,31 @@ public class Launcher : MonoBehaviour
         ParseCommandLineArgs();
     }
 
+    void OnDestroy()
+    {
+        CleanupNetwork();
+    }
+
+    void OnApplicationQuit()
+    {
+        CleanupNetwork();
+    }
+
     public static void StartAsClient()
     {
+        isMultiplayer = true;
         NetworkManager.Singleton.StartClient();
     }
 
     public static void StartAsHost()
     {
+        isMultiplayer = true;
         NetworkManager.Singleton.StartHost();
     }
 
     public static void StartAsClient(string address, ushort port)
     {
+        isMultiplayer = true;
         var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
         utp.SetConnectionData(address, port);
         NetworkManager.Singleton.StartClient();
@@ -41,9 +56,22 @@ public class Launcher : MonoBehaviour
 
     public static void StartAsHost(string address, ushort port)
     {
+        isMultiplayer = true;
         var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
         utp.SetConnectionData(address, port);
         NetworkManager.Singleton.StartHost();
+    }
+
+    public static void ShutdownNetwork()
+    {
+        if (NetworkManager.Singleton == null) return;
+
+        if (NetworkManager.Singleton.IsListening)
+        {
+            NetworkManager.Singleton.Shutdown();
+        }
+
+        isMultiplayer = false;
     }
 
     void ParseCommandLineArgs()
@@ -89,5 +117,21 @@ public class Launcher : MonoBehaviour
             Loader.Scene.MultiplayerScene.ToString(),
             LoadSceneMode.Single
         );
+    }
+
+    void CleanupNetwork()
+    {
+        if (NetworkManager.Singleton == null)
+        {
+            return;
+        }
+
+        NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+        NetworkManager.Singleton.OnServerStarted -= OnServerStarted;
+
+        if (NetworkManager.Singleton.IsListening)
+        {
+            NetworkManager.Singleton.Shutdown();
+        }
     }
 }

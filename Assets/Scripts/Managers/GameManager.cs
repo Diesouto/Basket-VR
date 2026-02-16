@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] float waitingToStartTimer = 1f;
     [SerializeField] float countdownToStartTimer = 3f;
     [SerializeField] float gamePlayingTimerMax = 10f;
+
     [Header("Multiplayer")]
     [Tooltip("Minimum number of connected players required to start the countdown when running as server")] 
     [SerializeField] int minPlayersToStart = 2;

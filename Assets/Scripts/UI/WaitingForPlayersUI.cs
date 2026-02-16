@@ -25,7 +25,5 @@ public class WaitingForPlayersUI : MonoBehaviour
 
         if (GameManager.Instance.IsCountdownToStartActive() || GameManager.Instance.IsGamePlaying())
             gameObject.SetActive(false);
-        else
-            gameObject.SetActive(true);
     }
 }

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Unity.Netcode;
+using UnityEditor.PackageManager;
+using UnityEngine;
 
 public class PointsManager : NetworkBehaviour
 {
@@ -118,9 +119,29 @@ public class PointsManager : NetworkBehaviour
         OnPointsChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public int GetPoints(ulong clientId)
+    public int GetPlayerPoints()
+    {
+        ulong localId = NetworkManager.Singleton.LocalClientId;
+        if (pointsPerClient.TryGetValue(localId, out int val)) return val;
+        return 0;
+    }
+
+    public int GetPlayerPoints(ulong clientId)
     {
         if (pointsPerClient.TryGetValue(clientId, out int val)) return val;
+        return 0;
+    }
+
+    public int GetRivalPoints()
+    {
+        var all = Instance.GetAllPoints();
+        ulong localId = NetworkManager.Singleton.LocalClientId;
+        foreach (var kv in all)
+        {
+            if (kv.Key == localId) continue;
+            return kv.Value;
+        }
+
         return 0;
     }
 
