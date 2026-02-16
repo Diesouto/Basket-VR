@@ -3222,7 +3222,7 @@ MonoBehaviour:
   waitingToStartTimer: 1
   countdownToStartTimer: 3
   gamePlayingTimerMax: 60
-  minPlayersToStart: 1
+  minPlayersToStart: 2
 --- !u!1001 &6599186983808602510
 PrefabInstance:
   m_ObjectHideFlags: 0

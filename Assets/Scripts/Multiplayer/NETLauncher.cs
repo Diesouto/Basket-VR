@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using System;
-using Unity.Netcode.Transports.UTP;
 
 [RequireComponent(typeof(NetworkManager))]
 [RequireComponent(typeof(UnityTransport))]

@@ -3967,10 +3967,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PCPlayer
       objectReference: {fileID: 0}
-    - target: {fileID: 3215279225165577599, guid: e97016bac28d8dd4f980eb1c30d1faa3, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6709202279518170695, guid: e97016bac28d8dd4f980eb1c30d1faa3, type: 3}
       propertyPath: ballGrabber
       value: 
@@ -4189,10 +4185,6 @@ PrefabInstance:
     - target: {fileID: 8793069825717455411, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: m_Name
       value: VRPlayer
-      objectReference: {fileID: 0}
-    - target: {fileID: 8793069825717455411, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9035141449549402438, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: GlobalObjectIdHash

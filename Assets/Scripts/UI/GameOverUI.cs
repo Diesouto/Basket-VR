@@ -1,8 +1,6 @@
 using TMPro;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 public class GameOver : MonoBehaviour
