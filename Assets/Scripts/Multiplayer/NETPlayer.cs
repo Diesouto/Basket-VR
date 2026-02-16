@@ -8,6 +8,9 @@ public class NETPlayer : NetworkBehaviour
     [Header("References")]
     public Transform holdPoint;
     public Camera playerCamera;
+    [Header("Local Components")]
+    public SimpleFPSPlayer simpleFPSPlayer;
+    public PCBallGrabber pcBallGrabber;
 
     [Header("Grab")]
     public LayerMask ballLayer;
@@ -32,13 +35,49 @@ public class NETPlayer : NetworkBehaviour
             playerCamera.enabled = IsOwner;
         }
 
-        // Only the owner needs input handling
+        // Enable owner-only local components (movement, grabber)
+        if (simpleFPSPlayer == null)
+            simpleFPSPlayer = GetComponent<SimpleFPSPlayer>();
+        if (pcBallGrabber == null)
+            pcBallGrabber = GetComponentInChildren<PCBallGrabber>();
+
         if (IsOwner)
         {
+            if (simpleFPSPlayer != null) simpleFPSPlayer.enabled = true;
+            // ensure SimpleFPSPlayer has the correct camera
+            if (simpleFPSPlayer != null && simpleFPSPlayer.cameraTransform == null && playerCamera != null)
+                simpleFPSPlayer.cameraTransform = playerCamera.transform;
+
+            // enable player input for immediate movement
+            if (simpleFPSPlayer != null) simpleFPSPlayer.EnablePlayer();
+            if (pcBallGrabber != null) pcBallGrabber.enabled = true;
+
+            // wire grabber references
+            if (pcBallGrabber != null && holdPoint != null)
+                pcBallGrabber.holdPoint = holdPoint;
+            if (pcBallGrabber != null)
+                pcBallGrabber.ballLayer = ballLayer;
+            if (simpleFPSPlayer != null && pcBallGrabber != null)
+                simpleFPSPlayer.ballGrabber = pcBallGrabber;
+
+            // Subscribe to GameManager state changes so owner input/cursor is updated on GameOver
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.OnStateChanged += OnGameStateChanged;
+                // apply current state immediately
+                OnGameStateChanged(this, System.EventArgs.Empty);
+            }
+
+            // Only the owner needs input handling for network actions
             inputActions = new InputSystem_Actions();
             inputActions.Player.Enable();
             inputActions.Player.Grab.performed += OnGrabPerformed;
             inputActions.Player.Grab.canceled += OnGrabCanceled;
+        }
+        else
+        {
+            if (simpleFPSPlayer != null) simpleFPSPlayer.enabled = false;
+            if (pcBallGrabber != null) pcBallGrabber.enabled = false;
         }
     }
 
@@ -54,6 +93,43 @@ public class NETPlayer : NetworkBehaviour
             inputActions.Player.Grab.canceled -= OnGrabCanceled;
             inputActions.Player.Disable();
             inputActions = null;
+        }
+
+        if (simpleFPSPlayer != null) simpleFPSPlayer.enabled = false;
+        if (pcBallGrabber != null) pcBallGrabber.enabled = false;
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnStateChanged -= OnGameStateChanged;
+        }
+    }
+
+    void OnGameStateChanged(object sender, System.EventArgs e)
+    {
+        if (!IsOwner) return;
+
+        if (GameManager.Instance == null) return;
+
+        if (GameManager.Instance.IsGameOver())
+        {
+            // disable movement and show cursor
+            if (simpleFPSPlayer != null) simpleFPSPlayer.DisablePlayerCompletely();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else if (GameManager.Instance.IsGamePlaying())
+        {
+            // ensure input enabled and cursor locked
+            if (simpleFPSPlayer != null) simpleFPSPlayer.EnablePlayer();
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            // waiting / countdown: disable movement but keep cursor visible so players can navigate UI
+            if (simpleFPSPlayer != null) simpleFPSPlayer.DisablePlayerInput();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 
@@ -206,5 +282,17 @@ public class NETPlayer : NetworkBehaviour
             try { heldRb.transform.SetParent(null); } catch { }
             heldRb = null;
         }
+    }
+
+    [ClientRpc]
+    public void SetInitialPositionClientRpc(Vector3 position, Quaternion rotation, ClientRpcParams clientRpcParams = default)
+    {
+        // directly set transform on the client for the player's owned object
+        try
+        {
+            transform.position = position;
+            transform.rotation = rotation;
+        }
+        catch { }
     }
 }

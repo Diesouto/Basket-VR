@@ -42,15 +42,21 @@ public class SimpleFPSPlayer : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        inputActions.Player.Enable();
+        if (inputActions != null)
+        {
+            inputActions.Player.Enable();
 
-        inputActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-        inputActions.Player.Move.canceled += _ => moveInput = Vector2.zero;
+            inputActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+            inputActions.Player.Move.canceled += _ => moveInput = Vector2.zero;
 
-        inputActions.Player.Grab.performed += _ => OnGrabPressed();
-        inputActions.Player.Grab.canceled += _ => OnGrabReleased();
+            inputActions.Player.Grab.performed += _ => OnGrabPressed();
+            inputActions.Player.Grab.canceled += _ => OnGrabReleased();
+        }
 
-        GameManager.Instance.OnStateChanged += Player_OnStateChanged;
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnStateChanged += Player_OnStateChanged;
+        }
     }
 
     private void Player_OnStateChanged(object sender, EventArgs e)
@@ -71,7 +77,8 @@ public class SimpleFPSPlayer : MonoBehaviour
 
     void OnDisable()
     {
-        inputActions.Player.Disable();
+        if (inputActions != null)
+            inputActions.Player.Disable();
 
         if (GameManager.Instance != null)
             GameManager.Instance.OnStateChanged -= Player_OnStateChanged;
@@ -81,6 +88,7 @@ public class SimpleFPSPlayer : MonoBehaviour
     {
         if (!canPlay) return;
 
+        if (inputActions == null) return;
         lookInput = inputActions.Player.Look.ReadValue<Vector2>();
 
         HandleMovement();
@@ -140,19 +148,19 @@ public class SimpleFPSPlayer : MonoBehaviour
         ballGrabber.Release(cameraTransform);
     }
 
-    void EnablePlayer()
+    public void EnablePlayer()
     {
         canPlay = true;
         controller.enabled = true;
     }
 
-    void DisablePlayerInput()
+    public void DisablePlayerInput()
     {
         canPlay = false;
         moveInput = Vector2.zero;
     }
 
-    void DisablePlayerCompletely()
+    public void DisablePlayerCompletely()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;

@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 4589022211604557292}
   - component: {fileID: 3551027467342078906}
   - component: {fileID: 2171983966055587725}
+  - component: {fileID: 1841301672094580886}
   - component: {fileID: 6709202279518170695}
   - component: {fileID: 2360239733251834977}
-  - component: {fileID: 1841301672094580886}
   - component: {fileID: 1635005666055262961}
-  - component: {fileID: 8721475679705281866}
   - component: {fileID: 6494283788975713846}
+  - component: {fileID: 8721475679705281866}
   m_Layer: 0
   m_Name: NETPCPlayer
   m_TagString: Untagged
@@ -121,6 +121,31 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!143 &1841301672094580886
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3215279225165577599}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6709202279518170695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,31 +186,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   throwForce: 10
---- !u!143 &1841301672094580886
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3215279225165577599}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1635005666055262961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 0
+  GlobalObjectIdHash: 1527115631
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -211,6 +211,30 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &6494283788975713846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3215279225165577599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7d91c3662f6b6c4e8dec358cd22205d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NETPlayer
+  ShowTopMostFoldoutHeaderGroup: 1
+  holdPoint: {fileID: 989491804769105247}
+  playerCamera: {fileID: 5564012505073940791}
+  simpleFPSPlayer: {fileID: 6709202279518170695}
+  pcBallGrabber: {fileID: 2360239733251834977}
+  ballLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  grabDistance: 3
+  interactLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &8721475679705281866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,28 +281,6 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &6494283788975713846
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3215279225165577599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7d91c3662f6b6c4e8dec358cd22205d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NETPlayer
-  ShowTopMostFoldoutHeaderGroup: 1
-  holdPoint: {fileID: 989491804769105247}
-  playerCamera: {fileID: 5564012505073940791}
-  ballLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  grabDistance: 3
-  interactLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!1 &6102018327350456976
 GameObject:
   m_ObjectHideFlags: 0
