@@ -11,9 +11,7 @@ public class PlayerSpawnManager : MonoBehaviour
     void Start()
     {
         if (NetworkManager.Singleton != null)
-        {
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-        }
     }
 
     void OnDestroy()

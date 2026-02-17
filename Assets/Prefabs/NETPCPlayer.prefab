@@ -13,8 +13,6 @@ GameObject:
   - component: {fileID: 3551027467342078906}
   - component: {fileID: 2171983966055587725}
   - component: {fileID: 1841301672094580886}
-  - component: {fileID: 6709202279518170695}
-  - component: {fileID: 2360239733251834977}
   - component: {fileID: 1635005666055262961}
   - component: {fileID: 6494283788975713846}
   - component: {fileID: 8721475679705281866}
@@ -146,46 +144,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6709202279518170695
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3215279225165577599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63ce0013ba4adcc4faffb5714678485a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SimpleFPSPlayer
-  moveSpeed: 5
-  gravity: -9.81
-  mouseSensitivity: 0.2
-  cameraTransform: {fileID: 8361732580169366045}
-  maxLookAngle: 80
-  interactDistance: 3
-  interactLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  ballGrabber: {fileID: 2360239733251834977}
---- !u!114 &2360239733251834977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3215279225165577599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d8e94db371965e4ab7773419ee237c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PCBallGrabber
-  holdPoint: {fileID: 989491804769105247}
-  grabDistance: 2
-  ballLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  throwForce: 10
 --- !u!114 &1635005666055262961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1527115631
+  GlobalObjectIdHash: 2950962769
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -210,7 +168,7 @@ MonoBehaviour:
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
+  AllowOwnerToParent: 1
 --- !u!114 &6494283788975713846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,17 +182,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NETPlayer
   ShowTopMostFoldoutHeaderGroup: 1
+  moveSpeed: 5
+  gravity: -9.81
+  mouseSensitivity: 0.5
+  cameraTransform: {fileID: 8361732580169366045}
+  maxLookAngle: 80
+  interactDistance: 3
+  interactLayer:
+    serializedVersion: 2
+    m_Bits: 64
   holdPoint: {fileID: 989491804769105247}
   playerCamera: {fileID: 5564012505073940791}
-  simpleFPSPlayer: {fileID: 6709202279518170695}
-  pcBallGrabber: {fileID: 2360239733251834977}
   ballLayer:
     serializedVersion: 2
     m_Bits: 64
   grabDistance: 3
-  interactLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!114 &8721475679705281866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,7 +221,7 @@ MonoBehaviour:
   RotationMaxInterpolationTime: 0.1
   ScaleLerpSmoothing: 1
   ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 0
+  AuthorityMode: 1
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1
@@ -404,7 +366,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8854249475720530993}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &5581084831262457165
 MonoBehaviour:
   m_ObjectHideFlags: 0
