@@ -115,6 +115,11 @@ public class GameManager : MonoBehaviour
         return 1 - (gamePlayingTimer / gamePlayingTimerMax);
     }
 
+    public int GetMinPlayersToStart()
+    {
+        return minPlayersToStart;
+    }
+
     public void TogglePauseGame()
     {
         isGamePaused = !isGamePaused;

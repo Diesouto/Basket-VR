@@ -53,7 +53,6 @@ public class NETPlayer : NetworkBehaviour
         }
 
         lookInput = inputActions.Player.Look.ReadValue<Vector2>();
-        print(lookInput);
 
         HandleMovement();
         HandleLook();
@@ -63,6 +62,7 @@ public class NETPlayer : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
+        // Desactiva la cámara del otro jugador para evitar que ambos jugadores vean a través de la misma cámara
         if (!IsOwner)
         {
             playerCamera.enabled = false;
@@ -71,11 +71,10 @@ public class NETPlayer : NetworkBehaviour
 
         playerCamera.enabled = true;
 
-        // Subscribe to GameManager state changes so owner input/cursor is updated on GameOver
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnStateChanged += Player_OnStateChanged;
-            Player_OnStateChanged(this, System.EventArgs.Empty); // apply current state immediately
+            Player_OnStateChanged(this, System.EventArgs.Empty); 
         }
 
         Cursor.lockState = CursorLockMode.Locked;
