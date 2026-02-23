@@ -15,21 +15,17 @@ public class MainMenuUI : MonoBehaviour
 
         playButton.onClick.AddListener(() =>
         {
-            Loader.LoadScene(Loader.Scene.GameScene);
+            Loader.LoadScene(Loader.Scene.GameSceneVR);
         }); 
 
         hostButton.onClick.AddListener(() =>
         {
             Loader.LoadMultiplayer(true);
-
-            //NetworkManager.Singleton.SceneManager.LoadScene(Loader.Scene.MultiplayerScene.ToString(), LoadSceneMode.Single);
         });
 
         clientButton.onClick.AddListener(() =>
         {
             Loader.LoadMultiplayer(false);
-
-            //NetworkManager.Singleton.SceneManager.LoadScene(Loader.Scene.MultiplayerScene.ToString(), LoadSceneMode.Single);
         });
 
         quitButton.onClick.AddListener(() =>

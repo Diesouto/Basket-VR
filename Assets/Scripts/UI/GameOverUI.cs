@@ -14,7 +14,7 @@ public class GameOver : MonoBehaviour
         returnToMainMenuButton.onClick.AddListener(() =>
         {
             Launcher.ShutdownNetwork();
-            SceneManager.LoadScene(Loader.Scene.MainMenuScene.ToString());
+            SceneManager.LoadScene(Loader.Scene.MainMenuSceneVR.ToString());
         });
 
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
