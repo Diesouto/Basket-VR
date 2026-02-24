@@ -16,7 +16,7 @@ public class MainMenuUI : MonoBehaviour
         playButton.onClick.AddListener(() =>
         {
             Loader.LoadScene(Loader.Scene.GameSceneVR);
-        }); 
+        });
 
         hostButton.onClick.AddListener(() =>
         {

@@ -6,7 +6,7 @@ public static class Loader
     {
         MainMenuSceneVR,
         GameSceneVR,
-        MultiplayerScene,
+        MultiplayerSceneVR,
         LoadingScene
     }
 

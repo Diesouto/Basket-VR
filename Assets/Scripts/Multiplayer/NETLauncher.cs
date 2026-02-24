@@ -113,7 +113,7 @@ public class Launcher : MonoBehaviour
         Debug.Log("Servidor iniciado correctamente.");
 
         NetworkManager.Singleton.SceneManager.LoadScene(
-            Loader.Scene.MultiplayerScene.ToString(),
+            Loader.Scene.MultiplayerSceneVR.ToString(),
             LoadSceneMode.Single
         );
     }
