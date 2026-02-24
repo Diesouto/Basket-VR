@@ -224,7 +224,7 @@ Transform:
   m_GameObject: {fileID: 94900451}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.71581435, z: -0, w: 0.6982907}
-  m_LocalPosition: {x: 0.032, y: 0.151, z: 2.26}
+  m_LocalPosition: {x: 0.032, y: 0.83, z: 2.26}
   m_LocalScale: {x: 0.33646, y: 0.8174, z: 2.3098705}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -451,7 +451,7 @@ Transform:
   m_GameObject: {fileID: 162150121}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.71581435, z: -0, w: 0.6982907}
-  m_LocalPosition: {x: 0, y: 0.647, z: 2.36}
+  m_LocalPosition: {x: 0, y: 1.326, z: 2.36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1903,6 +1903,22 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 913854995}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1102936038 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -4100303950097416598, guid: 5386a9435c63a69428c3be04f2b33b50, type: 3}
+  m_PrefabInstance: {fileID: 5513567378094714008}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 162501c0b39336642ba30b6d616057b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasketballCart
+--- !u!65 &1102936039 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 197841674162864059, guid: 5386a9435c63a69428c3be04f2b33b50, type: 3}
+  m_PrefabInstance: {fileID: 5513567378094714008}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1115512947
 GameObject:
   m_ObjectHideFlags: 0
@@ -3909,8 +3925,8 @@ RectTransform:
   m_GameObject: {fileID: 2051768326}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -154}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 99384894}
   - {fileID: 593148141}
@@ -3921,7 +3937,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 23, y: 0}
+  m_AnchoredPosition: {x: 23, y: -101}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2051768328
@@ -4157,6 +4173,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 332248652}
     m_Modifications:
+    - target: {fileID: 197841674162864059, guid: 5386a9435c63a69428c3be04f2b33b50, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2580374922840258300, guid: 5386a9435c63a69428c3be04f2b33b50, type: 3}
+      propertyPath: m_Colliders.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2580374922840258300, guid: 5386a9435c63a69428c3be04f2b33b50, type: 3}
+      propertyPath: 'm_Colliders.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1102936039}
+    - target: {fileID: 2580374922840258300, guid: 5386a9435c63a69428c3be04f2b33b50, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2580374922840258300, guid: 5386a9435c63a69428c3be04f2b33b50, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2580374922840258300, guid: 5386a9435c63a69428c3be04f2b33b50, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1102936038}
+    - target: {fileID: 2580374922840258300, guid: 5386a9435c63a69428c3be04f2b33b50, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2580374922840258300, guid: 5386a9435c63a69428c3be04f2b33b50, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SpawnBall
+      objectReference: {fileID: 0}
+    - target: {fileID: 2580374922840258300, guid: 5386a9435c63a69428c3be04f2b33b50, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BasketballCart, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2580374922840258300, guid: 5386a9435c63a69428c3be04f2b33b50, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2709094516486568860, guid: 5386a9435c63a69428c3be04f2b33b50, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.88
@@ -4311,10 +4367,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 293381548981666063, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: m_InteractionManager
+      value: 
+      objectReference: {fileID: 1972069071}
     - target: {fileID: 464137839134597645, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: 'm_Cameras.Array.data[0]'
       value: 
       objectReference: {fileID: 340036882}
+    - target: {fileID: 4734152495203355997, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: m_InteractionManager
+      value: 
+      objectReference: {fileID: 1972069071}
     - target: {fileID: 7152073006986673073, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: uiInteractor
       value: 

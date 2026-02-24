@@ -2279,10 +2279,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1942694924334304351, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4734152495203355997, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1961956756}
+    - target: {fileID: 4734152495203355997, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: m_SelectInput.m_InputSourceMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734152495203355997, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: m_ActivateInput.m_InputSourceMode
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7012169581517959401, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: m_RayInteractor
       value: 
@@ -2290,6 +2302,10 @@ PrefabInstance:
     - target: {fileID: 7152073006986673073, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: uiInteractor
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8214743437992213933, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8442215362270020664, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: m_LocalPosition.x
