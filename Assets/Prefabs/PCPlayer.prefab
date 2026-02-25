@@ -138,7 +138,7 @@ MonoBehaviour:
   interactDistance: 3
   interactLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   ballGrabber: {fileID: 2360239733251834977}
 --- !u!114 &2360239733251834977
 MonoBehaviour:

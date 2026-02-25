@@ -12,7 +12,7 @@ public class PlayerChangeInteractors : MonoBehaviour
         // If there is no GameManager in scene → use UI interactor
         if (GameManager.Instance == null)
         {
-            SetUIInteractorActive();
+            uiInteractor.gameObject.SetActive(true);
             return;
         }
 
@@ -38,37 +38,15 @@ public class PlayerChangeInteractors : MonoBehaviour
 
     private void UpdateInteractors()
     {
-        if (GameManager.Instance == null)
-        {
-            SetUIInteractorActive();
-            return;
-        }
-
         if (GameManager.Instance.IsGamePlaying())
         {
-            SetRightInteractorActive();
+            uiInteractor.gameObject.SetActive(false);
+            rightInteractor.gameObject.SetActive(true);
         }
         else
         {
-            SetUIInteractorActive();
+            uiInteractor.gameObject.SetActive(true);
+            rightInteractor.gameObject.SetActive(false);
         }
-    }
-
-    private void SetUIInteractorActive()
-    {
-        if (uiInteractor != null)
-            uiInteractor.enabled = true;
-
-        if (rightInteractor != null)
-            rightInteractor.enabled = false;
-    }
-
-    private void SetRightInteractorActive()
-    {
-        if (uiInteractor != null)
-            uiInteractor.enabled = false;
-
-        if (rightInteractor != null)
-            rightInteractor.enabled = true;
     }
 }
