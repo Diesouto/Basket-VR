@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class BasketballCart : MonoBehaviour, IBasketballOwner
 {
@@ -53,6 +55,29 @@ public class BasketballCart : MonoBehaviour, IBasketballOwner
 
         ball.ResetBall();
         ball.gameObject.SetActive(true);
+    }
+
+    // Spawn Balls for VR Player
+    public void SpawnBall(SelectEnterEventArgs args)
+    {
+        if (Time.time - lastSpawnTime < spawnCooldown)
+            return;
+
+        if (ballPool.Count == 0)
+            return;
+
+        lastSpawnTime = Time.time;
+
+        Basketball ball = ballPool.Dequeue();
+        ball.ResetBall();
+        ball.gameObject.SetActive(true);
+
+        var grabInteractable = ball.GetComponent<XRGrabInteractable>();
+
+        args.manager.SelectEnter(
+            args.interactorObject,
+            grabInteractable
+        );
     }
 
     public void ReturnBall(Basketball ball)

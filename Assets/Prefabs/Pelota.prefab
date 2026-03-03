@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 1, y: -0.000000029802317, z: -0.00000008146034, w: 0.000000021855698}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 11.437571, y: 11.437571, z: 11.437571}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8483853227528277557}
@@ -148,8 +148,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.008574247
+  m_Center: {x: 0, y: -0.000054955482, z: 0}
 --- !u!54 &4793128702519808355
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1078653803
+  GlobalObjectIdHash: 4153361081
   InScenePlacedSourceGlobalObjectIdHash: 209760918
   DeferredDespawnTick: 0
   Ownership: 1
