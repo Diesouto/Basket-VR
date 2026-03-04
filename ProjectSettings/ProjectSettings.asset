@@ -146,6 +146,8 @@ PlayerSettings:
   bundleVersion: 0.1.0
   preloadedAssets:
   - {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - {fileID: -1033812587881644374, guid: d3977594b9b02204aa81c8ffa458fc70, type: 2}
+  - {fileID: -7090076660558298031, guid: 11b8ed5dc4190aa4b9ecc013fce41237, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -855,7 +857,7 @@ PlayerSettings:
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
   metroPackageName: Basket-VR
-  metroPackageVersion: 
+  metroPackageVersion: 1.0.0.0
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
@@ -863,7 +865,7 @@ PlayerSettings:
   metroCertificateNotAfter: 0000000000000000
   metroApplicationDescription: Basket-VR
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: Basket-VR
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0
@@ -932,11 +934,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 1
   windowsGamepadBackendHint: 0
-  cloudProjectId: 4cc2e9cb-7bd2-4241-aad9-7c8a5e1a2282
+  cloudProjectId: df870067-3c6f-489f-90a3-4b20b103a653
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Basket-VR
-  organizationId: diesouto
+  projectName: DiegoProyectSisisi
+  organizationId: multy_a
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

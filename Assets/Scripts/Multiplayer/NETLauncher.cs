@@ -1,9 +1,12 @@
+using System;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Networking.Transport.Relay;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
+using Unity.Services.Relay;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
-using System;
 
 [RequireComponent(typeof(NetworkManager))]
 [RequireComponent(typeof(UnityTransport))]
@@ -11,8 +14,25 @@ public class Launcher : MonoBehaviour
 {
     public static bool isMultiplayer = false;
 
-    void Start()
+    private void Awake()
     {
+        if (FindObjectsOfType<Launcher>().Length > 1)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        DontDestroyOnLoad(gameObject);
+    }
+
+    async void Start()
+    {
+        await UnityServices.InitializeAsync();
+
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        }
+
         // Escuchamos cuando un cliente se conecta
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
 
@@ -33,15 +53,34 @@ public class Launcher : MonoBehaviour
         CleanupNetwork();
     }
 
-    public static void StartAsClient()
+    public async void StartAsClientRelay(string joinCode)
     {
         isMultiplayer = true;
+
+        var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
+
+        var allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+
+        utp.SetRelayServerData(new RelayServerData(allocation, "dtls"));
+
         NetworkManager.Singleton.StartClient();
     }
 
-    public static void StartAsHost()
+    public string CurrentJoinCode { get; private set; }
+
+    public async void StartAsHostRelay(int maxPlayers = 2)
     {
         isMultiplayer = true;
+
+        var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
+
+        var allocation = await RelayService.Instance.CreateAllocationAsync(maxPlayers);
+        CurrentJoinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+
+        Debug.Log("JOIN CODE: " + CurrentJoinCode);
+
+        utp.SetRelayServerData(new RelayServerData(allocation, "dtls"));
+
         NetworkManager.Singleton.StartHost();
     }
 

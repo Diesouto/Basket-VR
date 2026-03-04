@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public static class Loader
@@ -13,6 +14,7 @@ public static class Loader
     static Scene targetScene;
     static bool isMultiplayer;
     static bool startAsHost;
+    static string clientJoinCode;
 
     public static void LoadScene(Scene target)
     {
@@ -22,10 +24,11 @@ public static class Loader
         SceneManager.LoadScene(Scene.LoadingScene.ToString());
     }
 
-    public static void LoadMultiplayer(bool host)
+    public static void LoadMultiplayer(bool host, string joinCode = "")
     {
         isMultiplayer = true;
         startAsHost = host;
+        clientJoinCode = joinCode;
 
         SceneManager.LoadScene(Scene.LoadingScene.ToString());
     }
@@ -38,10 +41,30 @@ public static class Loader
         }
         else
         {
+            var launcher = UnityEngine.Object.FindFirstObjectByType<Launcher>();
+            if (launcher == null)
+            {
+                Debug.LogError("Launcher not found in scene!");
+                return;
+            }
+
             if (startAsHost)
-                Launcher.StartAsHost();
+            {
+                // Start host relay
+                launcher.StartAsHostRelay();
+            }
             else
-                Launcher.StartAsClient();
+            {
+                // Start client relay with the input join code
+                if (!string.IsNullOrEmpty(clientJoinCode))
+                {
+                    launcher.StartAsClientRelay(clientJoinCode);
+                }
+                else
+                {
+                    Debug.LogError("Join code is empty for client!");
+                }
+            }
         }
     }
 }

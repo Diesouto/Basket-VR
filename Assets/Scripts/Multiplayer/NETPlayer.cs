@@ -69,7 +69,7 @@ public class NETPlayer : NetworkBehaviour
             return;
         }
 
-        playerCamera.enabled = true;
+        if (playerCamera != null) playerCamera.enabled = true;
 
         if (GameManager.Instance != null)
         {

@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainMenuUI : MonoBehaviour
 {
     [SerializeField] Button playButton;
     [SerializeField] Button hostButton;
     [SerializeField] Button clientButton;
+    [SerializeField] TMP_InputField hostCodeInput;
     [SerializeField] Button quitButton;
 
     private void Awake()
@@ -25,7 +27,8 @@ public class MainMenuUI : MonoBehaviour
 
         clientButton.onClick.AddListener(() =>
         {
-            Loader.LoadMultiplayer(false);
+            string joinCode = hostCodeInput != null ? hostCodeInput.text.Trim() : "";
+            Loader.LoadMultiplayer(false, joinCode);
         });
 
         quitButton.onClick.AddListener(() =>
