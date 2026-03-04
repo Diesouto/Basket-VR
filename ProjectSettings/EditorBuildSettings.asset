@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/GameSceneVR.unity
     guid: 6bdbaf0214fb6dd41bf470a2a8a16914
   - enabled: 1
+    path: Assets/Scenes/MultiplayerSceneVR.unity
+    guid: 02f4ae41d987df34bad96e9c91137abd
+  - enabled: 1
     path: Assets/Scenes/PCTesting/GameScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1

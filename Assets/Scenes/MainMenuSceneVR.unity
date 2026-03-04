@@ -493,10 +493,10 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 201368103}
-    PlayerPrefab: {fileID: 0}
+    PlayerPrefab: {fileID: 8793069825717455411, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
     Prefabs:
       NetworkPrefabsLists:
-      - {fileID: 0}
+      - {fileID: 11400000, guid: fc6e88d2bc00f644d8ad6048999d8c3a, type: 2}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -2279,10 +2279,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4101766304534566987, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2239314539
+      objectReference: {fileID: 0}
+    - target: {fileID: -4101766304534566987, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: SceneMigrationSynchronization
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4101766304534566987, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 3836906956
+      objectReference: {fileID: 0}
+    - target: {fileID: 581291151366882886, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4734152495203355997, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1961956756}
+    - target: {fileID: 5674081983551947766, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8442215362270020664, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
