@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerChangeInteractors : MonoBehaviour
@@ -9,17 +10,16 @@ public class PlayerChangeInteractors : MonoBehaviour
 
     private void Start()
     {
-        // If there is no GameManager in scene → use UI interactor
-        if (GameManager.Instance == null)
-        {
-            uiInteractor.gameObject.SetActive(true);
-            return;
-        }
+        StartCoroutine(WaitForGameManager());
+    }
 
-        // Subscribe to state changes
+    private IEnumerator WaitForGameManager()
+    {
+        while (GameManager.Instance == null)
+            yield return null;
+
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
 
-        // Set initial state
         UpdateInteractors();
     }
 
