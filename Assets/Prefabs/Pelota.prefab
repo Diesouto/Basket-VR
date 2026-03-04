@@ -189,7 +189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e48738efdb02aa447bd01626d9021111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Basketball
-  timeToDespawn: 6
+  timeToDespawn: 20
 --- !u!114 &4097817580087314319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,7 +207,7 @@ MonoBehaviour:
   m_InteractionLayers:
     m_Bits: 1073741825
   m_DistanceCalculationMode: 1
-  m_SelectMode: 0
+  m_SelectMode: 1
   m_FocusMode: 1
   m_CustomReticle: {fileID: 0}
   m_AllowGazeInteraction: 0
