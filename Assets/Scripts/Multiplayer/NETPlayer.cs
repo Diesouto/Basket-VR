@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class NETPlayer : NetworkBehaviour
 {
+    [Header("Models")]
+    [SerializeField] private GameObject playerModelHost;
+    [SerializeField] private GameObject playerModelClient;
+
     [Header("Movement")]
     public float moveSpeed = 5f;
     public float gravity = -9.81f;
@@ -62,6 +66,8 @@ public class NETPlayer : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
+        SetupPlayerModel();
+
         // Desactiva la cámara del otro jugador para evitar que ambos jugadores vean a través de la misma cámara
         if (!IsOwner)
         {
@@ -91,6 +97,20 @@ public class NETPlayer : NetworkBehaviour
         inputActions.Player.Move.canceled += _ => moveInput = Vector2.zero;
 
         EnablePlayer();
+    }
+
+    void SetupPlayerModel()
+    {
+        if (OwnerClientId == NetworkManager.ServerClientId)
+        {
+            playerModelHost.SetActive(true);
+            playerModelClient.SetActive(false);
+        }
+        else
+        {
+            playerModelHost.SetActive(false);
+            playerModelClient.SetActive(true);
+        }
     }
 
     private void Player_OnStateChanged(object sender, EventArgs e)
