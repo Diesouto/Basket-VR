@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
@@ -14,6 +15,9 @@ public class Launcher : MonoBehaviour
 {
     public static bool isMultiplayer = false;
 
+    // Task que controla la inicialización de Unity Services
+    private Task initializationTask;
+
     private void Awake()
     {
         if (FindObjectsOfType<Launcher>().Length > 1)
@@ -26,12 +30,8 @@ public class Launcher : MonoBehaviour
 
     async void Start()
     {
-        await UnityServices.InitializeAsync();
-
-        if (!AuthenticationService.Instance.IsSignedIn)
-        {
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        }
+        // Inicializamos Unity Services y autenticación
+        initializationTask = InitializeServices();
 
         // Escuchamos cuando un cliente se conecta
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
@@ -41,6 +41,20 @@ public class Launcher : MonoBehaviour
 
         // Parse optional command-line args for address/port
         ParseCommandLineArgs();
+
+        await initializationTask;
+    }
+
+    async Task InitializeServices()
+    {
+        await UnityServices.InitializeAsync();
+
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        }
+
+        Debug.Log("Unity Services initialized. PlayerID: " + AuthenticationService.Instance.PlayerId);
     }
 
     void OnDestroy()
@@ -55,6 +69,9 @@ public class Launcher : MonoBehaviour
 
     public async void StartAsClientRelay(string joinCode)
     {
+        // Esperamos a que Unity Services esté listo
+        await initializationTask;
+
         isMultiplayer = true;
 
         var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
@@ -70,6 +87,9 @@ public class Launcher : MonoBehaviour
 
     public async void StartAsHostRelay(int maxPlayers = 2)
     {
+        // Esperamos a que Unity Services esté listo
+        await initializationTask;
+
         isMultiplayer = true;
 
         var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();

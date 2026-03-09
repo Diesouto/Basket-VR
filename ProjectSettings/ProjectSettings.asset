@@ -146,6 +146,7 @@ PlayerSettings:
   bundleVersion: 0.1.0
   preloadedAssets:
   - {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - {fileID: -3792556766859087225, guid: 11b8ed5dc4190aa4b9ecc013fce41237, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -932,10 +933,10 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 1
   windowsGamepadBackendHint: 0
-  cloudProjectId: 621dccef-c7c2-4ee0-9ab0-39127e382265
+  cloudProjectId: 4cc2e9cb-7bd2-4241-aad9-7c8a5e1a2282
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Basket-VR (1)
+  projectName: Basket-VR
   organizationId: diesouto
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
