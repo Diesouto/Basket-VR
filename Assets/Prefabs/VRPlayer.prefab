@@ -4848,7 +4848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 752933019
+  GlobalObjectIdHash: 3836906956
   InScenePlacedSourceGlobalObjectIdHash: 3836906956
   DeferredDespawnTick: 0
   Ownership: 1
@@ -4922,9 +4922,9 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   playerModelHost: {fileID: 7798837926373434796}
   playerModelClient: {fileID: 5733018330945620297}
-  moveSpeed: 5
+  moveSpeed: 0
   gravity: -9.81
-  mouseSensitivity: 0.5
+  mouseSensitivity: 0
   cameraTransform: {fileID: 4219675998868729897}
   maxLookAngle: 80
   interactDistance: 3
