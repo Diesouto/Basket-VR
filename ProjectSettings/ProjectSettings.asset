@@ -932,11 +932,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 1
   windowsGamepadBackendHint: 0
-  cloudProjectId: df870067-3c6f-489f-90a3-4b20b103a653
+  cloudProjectId: 621dccef-c7c2-4ee0-9ab0-39127e382265
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: DiegoProyectSisisi
-  organizationId: multy_a
+  projectName: Basket-VR (1)
+  organizationId: diesouto
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

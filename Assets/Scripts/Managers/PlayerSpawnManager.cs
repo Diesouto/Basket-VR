@@ -13,21 +13,23 @@ public class PlayerSpawnManager : MonoBehaviour
 
         if (!NetworkManager.Singleton.IsServer) return;
 
-        NETPlayer[] players = FindObjectsByType<NETPlayer>(FindObjectsSortMode.None);
+        var clients = NetworkManager.Singleton.ConnectedClientsList;
 
-        if (players.Length < GameManager.Instance.GetMinPlayersToStart()) return;
+        if (clients.Count < GameManager.Instance.GetMinPlayersToStart()) return;
 
-        foreach (var player in players)
+        for (int i = 0; i < clients.Count; i++)
         {
-            int index = (int)player.OwnerClientId;
+            var playerObject = clients[i].PlayerObject;
 
-            if (index >= spawnPoints.Length) continue;
+            if (playerObject == null) continue;
 
-            player.transform.position = spawnPoints[index].position;
-            player.transform.rotation = spawnPoints[index].rotation;
+            if (i >= spawnPoints.Length) continue;
+
+            playerObject.transform.position = spawnPoints[i].position;
+            playerObject.transform.rotation = spawnPoints[i].rotation;
         }
 
         hasAssignedSpawns = true;
-        enabled = false; // disable this script forever
+        enabled = false;
     }
 }
