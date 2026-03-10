@@ -136,8 +136,8 @@ public class SimpleFPSPlayer : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, interactDistance, interactLayer))
         {
             BasketballCart cart = hit.collider.GetComponent<BasketballCart>();
-            if (cart != null)
-                cart.SpawnBall();
+            //if (cart != null)
+                //cart.SpawnBall();
         }
     }
 

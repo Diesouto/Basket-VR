@@ -29,18 +29,19 @@ public class PointsManager : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-        // Only the server tracks connected clients and initializes their points
         if (IsServer && NetworkManager.Singleton != null)
         {
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
 
-            // initialize current connected clients
             foreach (var kv in NetworkManager.Singleton.ConnectedClients)
             {
                 ulong clientId = kv.Key;
+
                 if (!pointsPerClient.ContainsKey(clientId))
                     pointsPerClient[clientId] = 0;
+
+                UpdateClientPointsClientRpc(clientId, pointsPerClient[clientId]);
             }
         }
     }
