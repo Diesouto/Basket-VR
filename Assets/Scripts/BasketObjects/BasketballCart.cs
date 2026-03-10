@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-using Unity.Netcode;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
-using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
-public class BasketballCart : NetworkBehaviour, IBasketballOwner
+public class BasketballCart : MonoBehaviour, IBasketballOwner
 {
     [Header("Ball")]
     [SerializeField] GameObject basketballPrefab;
@@ -20,10 +18,7 @@ public class BasketballCart : NetworkBehaviour, IBasketballOwner
 
     void Start()
     {
-        if (IsServer)
-        {
-            CreatePool();
-        }
+        CreatePool();
     }
 
     void CreatePool()
@@ -31,9 +26,6 @@ public class BasketballCart : NetworkBehaviour, IBasketballOwner
         for (int i = 0; i < initialPoolSize; i++)
         {
             GameObject ballObj = Instantiate(basketballPrefab, transform);
-
-            var netObj = ballObj.GetComponent<NetworkObject>();
-            netObj.Spawn(true);
 
             ballObj.SetActive(false);
 
@@ -44,67 +36,54 @@ public class BasketballCart : NetworkBehaviour, IBasketballOwner
         }
     }
 
-    // Called when VR player grabs from cart
+    public void SpawnBall()
+
+    {
+        if (Time.time - lastSpawnTime < spawnCooldown)
+            return;
+
+        if (ballPool.Count == 0)
+        {
+            Debug.Log("TODAVIA NO HAY PELOTAS");
+            return; // @TODO: opcional expandir pool din�micamente
+        }
+
+        lastSpawnTime = Time.time;
+
+        Basketball ball = ballPool.Dequeue();
+
+        ball.transform.position = spawnPoint.position;
+        ball.transform.rotation = spawnPoint.rotation;
+
+        ball.ResetBall();
+        ball.gameObject.SetActive(true);
+    }
+
+    // Spawn Balls for VR Player
     public void SpawnBall(SelectEnterEventArgs args)
     {
         if (Time.time - lastSpawnTime < spawnCooldown)
             return;
 
-        lastSpawnTime = Time.time;
-
-        ulong senderClientId = NetworkManager.Singleton.LocalClientId;
-
-        SpawnBallRpc(senderClientId);
-    }
-
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    void SpawnBallRpc(ulong clientId)
-    {
         if (ballPool.Count == 0)
             return;
 
+        lastSpawnTime = Time.time;
+
         Basketball ball = ballPool.Dequeue();
-
-        ball.transform.SetPositionAndRotation(
-            spawnPoint.position,
-            spawnPoint.rotation
-        );
-
         ball.ResetBall();
         ball.gameObject.SetActive(true);
 
-        ulong netId = ball.GetComponent<NetworkObject>().NetworkObjectId;
+        var grabInteractable = ball.GetComponent<XRGrabInteractable>();
 
-        GiveBallRpc(netId, clientId);
-    }
-
-    [Rpc(SendTo.NotOwner)]
-    void GiveBallRpc(ulong ballNetId, ulong clientId)
-    {
-        if (NetworkManager.Singleton.LocalClientId != clientId)
-            return;
-
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(ballNetId, out NetworkObject netObj))
-            return;
-
-        XRGrabInteractable grab = netObj.GetComponent<XRGrabInteractable>();
-
-        XRBaseInteractor interactor = FindFirstObjectByType<XRBaseInteractor>();
-
-        if (interactor != null && grab != null)
-        {
-            grab.interactionManager.SelectEnter(
-                (IXRSelectInteractor)interactor,
-                (IXRSelectInteractable)grab
-            );
-        }
+        args.manager.SelectEnter(
+            args.interactorObject,
+            grabInteractable
+        );
     }
 
     public void ReturnBall(Basketball ball)
     {
-        if (!IsServer)
-            return;
-
         ball.gameObject.SetActive(false);
         ballPool.Enqueue(ball);
     }

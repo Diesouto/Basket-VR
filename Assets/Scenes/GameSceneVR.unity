@@ -2213,6 +2213,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 332248652}
     m_Modifications:
+    - target: {fileID: -3714832069279410049, guid: 3ebfe901170efcd4ab6467c441e2b1ba, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 4129714856
+      objectReference: {fileID: 0}
+    - target: {fileID: -3714832069279410049, guid: 3ebfe901170efcd4ab6467c441e2b1ba, type: 3}
+      propertyPath: SceneMigrationSynchronization
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3714832069279410049, guid: 3ebfe901170efcd4ab6467c441e2b1ba, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 791764616
+      objectReference: {fileID: 0}
     - target: {fileID: 5903761794171547423, guid: 3ebfe901170efcd4ab6467c441e2b1ba, type: 3}
       propertyPath: m_Name
       value: CarroPelotas
@@ -2458,7 +2470,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8442215362270020664, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.66
+      value: 0.364
       objectReference: {fileID: 0}
     - target: {fileID: 8442215362270020664, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: m_LocalPosition.z

@@ -22,10 +22,24 @@ public class PlayerSpawnManager : MonoBehaviour
         for (int i = 0; i < clients.Count && i < spawnPoints.Length; i++)
         {
             var playerObject = clients[i].PlayerObject;
+            var player = playerObject.GetComponent<NETPlayer>();
 
-            playerObject.transform.SetPositionAndRotation(
+            if (player == null) continue;
+
+            var targetClient = clients[i].ClientId;
+
+            var clientRpcParams = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new ulong[] { targetClient }
+                }
+            };
+
+            player.SetInitialPositionClientRpc(
                 spawnPoints[i].position,
-                spawnPoints[i].rotation
+                spawnPoints[i].rotation,
+                clientRpcParams
             );
         }
     }
