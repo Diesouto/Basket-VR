@@ -1069,7 +1069,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_InputActionReference: {fileID: -7933745396035750129, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    m_InputActionReference: {fileID: 0}
     m_ObjectReferenceObject: {fileID: 0}
     m_ManualValue: {x: 0, y: 0}
 --- !u!1 &1188695228935483389
@@ -1569,7 +1569,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_InputActionReference: {fileID: -2396888632427237367, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    m_InputActionReference: {fileID: 0}
     m_ObjectReferenceObject: {fileID: 0}
     m_ManualValue: {x: 0, y: 0}
   m_RightHandMoveInput:
@@ -4789,7 +4789,7 @@ GameObject:
   - component: {fileID: 7488247399918362849}
   m_Layer: 0
   m_Name: VRPlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5054,7 +5054,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   holdPoint: {fileID: 0}
-  playerCamera: {fileID: 0}
+  playerCamera: {fileID: 340190042949971815}
+  playerRightHand: {fileID: 600190717536946895}
+  playerLeftHand: {fileID: 757368670022859344}
   simpleFPSPlayer: {fileID: 0}
   pcBallGrabber: {fileID: 0}
   ballLayer:

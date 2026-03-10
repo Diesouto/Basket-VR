@@ -24,6 +24,10 @@ public class NETPlayer : NetworkBehaviour
     [Header("References")]
     public Transform holdPoint;
     public Camera playerCamera;
+    [SerializeField] private GameObject playerRightHand;
+    [SerializeField] private GameObject playerLeftHand;
+
+
     [Header("Local Components")]
     public SimpleFPSPlayer simpleFPSPlayer;
     public PCBallGrabber pcBallGrabber;
@@ -68,10 +72,12 @@ public class NETPlayer : NetworkBehaviour
 
         SetupPlayerModel();
 
-        // Desactiva la cámara del otro jugador para evitar que ambos jugadores vean a través de la misma cámara
+        // Desactiva la cámara y manos del otro jugador para evitar que ambos jugadores vean a través de la misma cámara
         if (!IsOwner)
         {
             playerCamera.enabled = false;
+            playerRightHand.SetActive(false);
+            playerLeftHand.SetActive(false);
             return;
         }
 
