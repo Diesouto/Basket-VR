@@ -3,6 +3,8 @@ using Unity.Netcode;
 
 public class BasketDetection : NetworkBehaviour
 {
+    [SerializeField] private ParticleSystem confettiParticles;
+
     private void OnTriggerEnter(Collider other)
     {
         // Only the server should handle scoring in multiplayer. In single-player, allow local scoring.
@@ -15,6 +17,8 @@ public class BasketDetection : NetworkBehaviour
         if (!ball.GetHasScored() && ball.GetComponent<Rigidbody>().linearVelocity.y < 0)
         {
             ball.SetHasScored(true);
+
+            PlayConfettiClientRpc();
 
             // Determine the owner of the ball if networked
             var netObj = ball.GetComponent<NetworkObject>();
@@ -32,6 +36,15 @@ public class BasketDetection : NetworkBehaviour
                 if (PointsManager.Instance != null)
                     PointsManager.Instance.AddBasketPointsLocal();
             }
+        }
+    }
+
+    [ClientRpc]
+    private void PlayConfettiClientRpc()
+    {
+        if (confettiParticles != null)
+        {
+            confettiParticles.Play();
         }
     }
 }
