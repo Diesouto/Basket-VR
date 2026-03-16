@@ -49,6 +49,7 @@ public class PointsManager : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
+
         if (IsServer && NetworkManager.Singleton != null)
         {
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
@@ -59,6 +60,7 @@ public class PointsManager : NetworkBehaviour
     private void OnClientConnected(ulong clientId)
     {
         if (!IsServer) return;
+
         if (!pointsPerClient.ContainsKey(clientId))
             pointsPerClient[clientId] = 0;
 
@@ -69,16 +71,48 @@ public class PointsManager : NetworkBehaviour
     private void OnClientDisconnected(ulong clientId)
     {
         if (!IsServer) return;
-        // set disconnected client's points to 0 so clients don't show stale values
+
         if (pointsPerClient.ContainsKey(clientId))
             pointsPerClient[clientId] = 0;
+
         UpdateClientPointsClientRpc(clientId, 0);
     }
 
-    public void AddBasketPointsForClient(ulong clientId)
+    // Cart-based scoring entry point
+    public void AddBasketPoints(BasketballCart cart)
+    {
+        if (cart == null)
+        {
+            Debug.LogWarning("AddBasketPoints called with null cart.");
+            return;
+        }
+
+        ulong clientId = 0;
+
+        bool networkingActive = NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening;
+
+        if (networkingActive)
+        {
+            NetworkObject netObj = cart.GetComponent<NetworkObject>();
+
+            if (netObj == null)
+            {
+                Debug.LogWarning("Cart missing NetworkObject.");
+                return;
+            }
+
+            clientId = netObj.OwnerClientId;
+        }
+
+        AddBasketPointsForClient(clientId);
+    }
+
+    // INTERNAL scoring logic (unchanged)
+    private void AddBasketPointsForClient(ulong clientId)
     {
         // Allow single-player local updates when networking is not active.
         bool networkingActive = NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening;
+
         if (networkingActive && !IsServer)
         {
             Debug.LogWarning("AddBasketPointsForClient should be called on server.");
@@ -89,6 +123,7 @@ public class PointsManager : NetworkBehaviour
             pointsPerClient[clientId] = 0;
 
         pointsPerClient[clientId] += pointsPerBasket;
+
         int newPoints = pointsPerClient[clientId];
 
         if (networkingActive)
@@ -122,13 +157,18 @@ public class PointsManager : NetworkBehaviour
     public int GetPlayerPoints()
     {
         ulong localId = NetworkManager.Singleton.LocalClientId;
-        if (pointsPerClient.TryGetValue(localId, out int val)) return val;
+
+        if (pointsPerClient.TryGetValue(localId, out int val))
+            return val;
+
         return 0;
     }
 
     public int GetPlayerPoints(ulong clientId)
     {
-        if (pointsPerClient.TryGetValue(clientId, out int val)) return val;
+        if (pointsPerClient.TryGetValue(clientId, out int val))
+            return val;
+
         return 0;
     }
 
@@ -136,6 +176,7 @@ public class PointsManager : NetworkBehaviour
     {
         var all = Instance.GetAllPoints();
         ulong localId = NetworkManager.Singleton.LocalClientId;
+
         foreach (var kv in all)
         {
             if (kv.Key == localId) continue;
@@ -145,14 +186,15 @@ public class PointsManager : NetworkBehaviour
         return 0;
     }
 
-    public Dictionary<ulong,int> GetAllPoints()
+    public Dictionary<ulong, int> GetAllPoints()
     {
-        return new Dictionary<ulong,int>(pointsPerClient);
+        return new Dictionary<ulong, int>(pointsPerClient);
     }
 
     public void ResetAllPoints()
     {
         if (!IsServer) return;
+
         pointsPerClient.Clear();
         UpdateAllClientsResetClientRpc();
     }

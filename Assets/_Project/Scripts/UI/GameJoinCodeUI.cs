@@ -18,4 +18,12 @@ public class GameJoinCodeUI : MonoBehaviour
             joinCodeText.text = "(not generated yet)";
         }
     }
+
+    private void Update()
+    {
+        if (GameManager.Instance.IsCountdownToStartActive())
+        {
+            gameObject.SetActive(false);
+        }
+    }
 }

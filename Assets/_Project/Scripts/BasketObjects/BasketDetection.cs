@@ -7,40 +7,51 @@ public class BasketDetection : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Only the server should handle scoring in multiplayer. In single-player, allow local scoring.
         bool networkActive = NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening;
-        if (networkActive && !IsServer) return;
+
+        // Only the server should handle scoring in multiplayer
+        if (networkActive && !IsServer)
+            return;
 
         Basketball ball = other.GetComponent<Basketball>();
-        if (ball == null) return;
+        if (ball == null)
+            return;
 
-        if (!ball.GetHasScored() && ball.GetComponent<Rigidbody>().linearVelocity.y < 0)
+        Rigidbody rb = ball.GetComponent<Rigidbody>();
+
+        if (!ball.GetHasScored() && rb.linearVelocity.y < 0)
         {
             ball.SetHasScored(true);
 
-            PlayConfettiClientRpc();
-
-            // Determine the owner of the ball if networked
-            var netObj = ball.GetComponent<NetworkObject>();
-            if (netObj != null)
+            // Play confetti
+            if (networkActive)
             {
-                ulong owner = netObj.OwnerClientId;
-                Debug.Log($"BasketDetection: scored by owner {owner}");
-                if (PointsManager.Instance != null)
-                    PointsManager.Instance.AddBasketPointsForClient(owner);
+                // Multiplayer: notify clients
+                PlayConfettiClientRpc();
             }
             else
             {
-                // local singleplayer
-                Debug.Log("BasketDetection: scored in single-player");
-                if (PointsManager.Instance != null)
-                    PointsManager.Instance.AddBasketPointsLocal();
+                // Singleplayer: fallback
+                PlayConfettiLocal();
+            }
+
+            BasketballCart cart = ball.GetOwnerCart();
+
+            if (cart != null && PointsManager.Instance != null)
+            {
+                PointsManager.Instance.AddBasketPoints(cart);
             }
         }
     }
 
     [ClientRpc]
     private void PlayConfettiClientRpc()
+    {
+        PlayConfettiLocal();
+    }
+
+    // Local fallback function
+    private void PlayConfettiLocal()
     {
         if (confettiParticles != null)
         {

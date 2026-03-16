@@ -1,22 +1,23 @@
 ﻿using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
-public class BasketballCart : MonoBehaviour, IBasketballOwner
+public class BasketballCart : NetworkBehaviour, IBasketballOwner
 {
     [Header("Ball")]
-    [SerializeField] GameObject basketballPrefab;
-    [SerializeField] Transform spawnPoint;
-    [SerializeField] float spawnCooldown = 0.5f;
+    [SerializeField] private GameObject basketballPrefab;
+    [SerializeField] private Transform spawnPoint;
+    [SerializeField] private float spawnCooldown = 0.5f;
 
     [Header("Pool")]
-    [SerializeField] int initialPoolSize = 10;
+    [SerializeField] private int initialPoolSize = 10;
 
     Queue<Basketball> ballPool = new Queue<Basketball>();
     float lastSpawnTime;
 
-    void Start()
+    void Awake()
     {
         CreatePool();
     }
@@ -37,20 +38,18 @@ public class BasketballCart : MonoBehaviour, IBasketballOwner
     }
 
     public void SpawnBall()
-
     {
         if (Time.time - lastSpawnTime < spawnCooldown)
             return;
 
         if (ballPool.Count == 0)
-        {
-            Debug.Log("TODAVIA NO HAY PELOTAS");
-            return; // @TODO: opcional expandir pool din�micamente
-        }
+            return;
 
         lastSpawnTime = Time.time;
 
         Basketball ball = ballPool.Dequeue();
+
+        ball.Initialize(this);
 
         ball.transform.position = spawnPoint.position;
         ball.transform.rotation = spawnPoint.rotation;
@@ -59,9 +58,14 @@ public class BasketballCart : MonoBehaviour, IBasketballOwner
         ball.gameObject.SetActive(true);
     }
 
-    // Spawn Balls for VR Player
+    // Spawn ball directly into VR hand
     public void SpawnBall(SelectEnterEventArgs args)
     {
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
+        {
+            if (!IsOwner) return;
+        }
+
         if (Time.time - lastSpawnTime < spawnCooldown)
             return;
 
@@ -71,6 +75,10 @@ public class BasketballCart : MonoBehaviour, IBasketballOwner
         lastSpawnTime = Time.time;
 
         Basketball ball = ballPool.Dequeue();
+
+        ball.transform.position = spawnPoint.position;
+        ball.transform.rotation = spawnPoint.rotation;
+
         ball.ResetBall();
         ball.gameObject.SetActive(true);
 
@@ -86,5 +94,36 @@ public class BasketballCart : MonoBehaviour, IBasketballOwner
     {
         ball.gameObject.SetActive(false);
         ballPool.Enqueue(ball);
+    }
+
+
+    // PC MULTIPLAYER CODE
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    public void RequestSpawnServerRpc()
+    {
+        if (!IsServer) return;
+        Debug.Log($"NETBasketballCart.RequestSpawnServerRpc: spawn requested on server (cart={name})");
+        TrySpawnBall();
+    }
+
+    public void TrySpawnBall()
+    {
+        if (!IsServer) return;
+        if (Time.time - lastSpawnTime < spawnCooldown)
+        {
+            Debug.Log("NETBasketballCart.TrySpawnBall: cooldown active");
+            return;
+        }
+        lastSpawnTime = Time.time;
+        Debug.Log("NETBasketballCart.TrySpawnBall: spawning ball now");
+        SpawnBall();
+    }
+
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    void RequestReturnServerRpc(ulong ballNetId)
+    {
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(ballNetId)) return;
+        var nobj = NetworkManager.Singleton.SpawnManager.SpawnedObjects[ballNetId];
+        nobj.Despawn(true);
     }
 }

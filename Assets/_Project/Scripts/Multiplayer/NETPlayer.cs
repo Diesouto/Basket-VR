@@ -275,7 +275,7 @@ public class NETPlayer : NetworkBehaviour
         }
 
         Debug.Log($"NETPlayer.TryLocalInteract: hit {hit.collider.name} (layer {hit.collider.gameObject.layer})");
-        var cart = hit.collider.GetComponentInParent<NETBasketballCart>();
+        var cart = hit.collider.GetComponentInParent<BasketballCart>();
         if (cart != null)
         {
             Debug.Log($"NETPlayer: requesting spawn from cart {cart.name}");

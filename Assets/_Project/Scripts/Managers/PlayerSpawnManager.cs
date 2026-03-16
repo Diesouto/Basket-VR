@@ -15,7 +15,7 @@ public class PlayerSpawnManager : MonoBehaviour
 
         var clients = NetworkManager.Singleton.ConnectedClientsList;
 
-        if (clients.Count < GameManager.Instance.GetMinPlayersToStart()) return;
+        //if (clients.Count < GameManager.Instance.GetMinPlayersToStart()) return;
 
         if (clients.Any(c => c.PlayerObject == null)) return;
 
@@ -36,11 +36,18 @@ public class PlayerSpawnManager : MonoBehaviour
                 }
             };
 
+            // Disable character controller before changing positions
+            player.gameObject.GetComponent<CharacterController>().enabled = false;
+
+            // Change player position
             player.SetInitialPositionClientRpc(
                 spawnPoints[i].position,
                 spawnPoints[i].rotation,
                 clientRpcParams
             );
+
+            // Enable character controller
+            player.gameObject.GetComponent<CharacterController>().enabled = true;
         }
     }
 }
