@@ -3953,7 +3953,7 @@ MonoBehaviour:
       m_SingletonActionBindings:
       - m_Name: 
         m_Id: cd363798-f589-45ee-a9f1-aa15e68b05af
-        m_Path: <XRController>{LeftHand}/menuButton
+        m_Path: <XRController>{LeftHand}/devicePosition/x
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -5127,7 +5127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3752863442
+  GlobalObjectIdHash: 3836906956
   InScenePlacedSourceGlobalObjectIdHash: 3836906956
   DeferredDespawnTick: 0
   Ownership: 1
