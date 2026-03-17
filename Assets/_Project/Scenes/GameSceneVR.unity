@@ -2517,14 +2517,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: VRPlayer
       objectReference: {fileID: 0}
-    - target: {fileID: 9060139356550121419, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
-      propertyPath: pauseButton
-      value: 
-      objectReference: {fileID: -4030727816006596680, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-    - target: {fileID: 9060139356550121419, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
-      propertyPath: pauseButton.m_UseReference
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

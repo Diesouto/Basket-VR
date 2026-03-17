@@ -3762,6 +3762,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VRPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 9060139356550121419, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: pauseButton
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

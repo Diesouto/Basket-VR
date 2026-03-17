@@ -15,6 +15,11 @@ public class VRPauseMenu : MonoBehaviour
 
     private void PausePerformed(InputAction.CallbackContext obj)
     {
+        TogglePauseMenu();
+    }
+
+    public void TogglePauseMenu()
+    {
         menuOpened = !menuOpened;
         pauseMenu.gameObject.SetActive(menuOpened);
     }
