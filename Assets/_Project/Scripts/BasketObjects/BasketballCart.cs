@@ -1,128 +1,146 @@
-﻿using System.Collections.Generic;
-using Unity.Netcode;
+﻿using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class BasketballCart : NetworkBehaviour, IBasketballOwner
 {
     [Header("Ball")]
     [SerializeField] private GameObject basketballPrefab;
-    [SerializeField] private Transform spawnPoint;
     [SerializeField] private float spawnCooldown = 0.5f;
 
-    [Header("Pool")]
-    [SerializeField] private int initialPoolSize = 10;
-
-    Queue<Basketball> ballPool = new Queue<Basketball>();
     float lastSpawnTime;
 
-    void Awake()
-    {
-        CreatePool();
-    }
+    // Cache XR interaction data for grab after spawn
+    private IXRSelectInteractor _lastInteractor;
+    private XRInteractionManager _lastInteractionManager;
 
-    void CreatePool()
-    {
-        for (int i = 0; i < initialPoolSize; i++)
-        {
-            GameObject ballObj = Instantiate(basketballPrefab, transform);
-
-            ballObj.SetActive(false);
-
-            Basketball ball = ballObj.GetComponent<Basketball>();
-            ball.Initialize(this);
-
-            ballPool.Enqueue(ball);
-        }
-    }
-
-    public void SpawnBall()
-    {
-        if (Time.time - lastSpawnTime < spawnCooldown)
-            return;
-
-        if (ballPool.Count == 0)
-            return;
-
-        lastSpawnTime = Time.time;
-
-        Basketball ball = ballPool.Dequeue();
-
-        ball.Initialize(this);
-
-        ball.transform.position = spawnPoint.position;
-        ball.transform.rotation = spawnPoint.rotation;
-
-        ball.ResetBall();
-        ball.gameObject.SetActive(true);
-    }
-
-    // Spawn ball directly into VR hand
+    // =========================
+    // ENTRY POINT (VR GRAB)
+    // =========================
     public void SpawnBall(SelectEnterEventArgs args)
     {
-        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
+        _lastInteractor = args.interactorObject;
+        _lastInteractionManager = args.manager;
+
+        // 🟢 SINGLE PLAYER (no network running)
+        if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening)
         {
-            if (!IsOwner) return;
+            SpawnBallLocal();
+            return;
         }
+
+        // 🔵 MULTIPLAYER
+        RequestSpawnServerRpc();
+    }
+
+    // =========================
+    // SERVER RPC (CLIENT → SERVER)
+    // =========================
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestSpawnServerRpc(ServerRpcParams rpcParams = default)
+    {
+        ulong clientId = rpcParams.Receive.SenderClientId;
 
         if (Time.time - lastSpawnTime < spawnCooldown)
             return;
 
-        if (ballPool.Count == 0)
+        lastSpawnTime = Time.time;
+
+        SpawnBallServer(clientId);
+    }
+
+    // =========================
+    // SERVER SPAWN LOGIC
+    // =========================
+    private void SpawnBallServer(ulong clientId)
+    {
+        GameObject ballObj = Instantiate(basketballPrefab);
+
+        var netObj = ballObj.GetComponent<NetworkObject>();
+
+        netObj.Spawn(true);
+        netObj.ChangeOwnership(clientId);
+
+        var ball = ballObj.GetComponent<Basketball>();
+        ball.Initialize(this);
+        ball.ResetBall();
+
+        // Tell only that client to grab
+        GrabBallClientRpc(netObj.NetworkObjectId, clientId);
+    }
+
+    private void SpawnBallLocal()
+    {
+        if (Time.time - lastSpawnTime < spawnCooldown)
             return;
 
         lastSpawnTime = Time.time;
 
-        Basketball ball = ballPool.Dequeue();
+        GameObject ballObj = Instantiate(basketballPrefab);
 
-        ball.transform.position = spawnPoint.position;
-        ball.transform.rotation = spawnPoint.rotation;
-
+        var ball = ballObj.GetComponent<Basketball>();
+        ball.Initialize(this);
         ball.ResetBall();
-        ball.gameObject.SetActive(true);
 
-        var grabInteractable = ball.GetComponent<XRGrabInteractable>();
+        var grabInteractable = ballObj.GetComponent<XRGrabInteractable>();
 
-        args.manager.SelectEnter(
-            args.interactorObject,
-            grabInteractable
-        );
+        if (_lastInteractor != null && _lastInteractionManager != null)
+        {
+            _lastInteractionManager.SelectEnter(_lastInteractor, grabInteractable);
+        }
     }
 
+    // =========================
+    // CLIENT RPC (SERVER → CLIENT)
+    // =========================
+    [ClientRpc]
+    private void GrabBallClientRpc(ulong netId, ulong targetClientId)
+    {
+        // Only execute on the intended client
+        if (NetworkManager.Singleton.LocalClientId != targetClientId)
+            return;
+
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(netId, out var netObj))
+            return;
+
+        var grabInteractable = netObj.GetComponent<XRGrabInteractable>();
+
+        if (_lastInteractor != null && _lastInteractionManager != null)
+        {
+            _lastInteractionManager.SelectEnter(_lastInteractor, grabInteractable);
+        }
+    }
+
+    // =========================
+    // RETURN / DESPAWN
+    // =========================
     public void ReturnBall(Basketball ball)
     {
-        ball.gameObject.SetActive(false);
-        ballPool.Enqueue(ball);
-    }
-
-
-    // PC MULTIPLAYER CODE
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    public void RequestSpawnServerRpc()
-    {
-        if (!IsServer) return;
-        Debug.Log($"NETBasketballCart.RequestSpawnServerRpc: spawn requested on server (cart={name})");
-        TrySpawnBall();
-    }
-
-    public void TrySpawnBall()
-    {
-        if (!IsServer) return;
-        if (Time.time - lastSpawnTime < spawnCooldown)
+        // 🟢 SINGLE PLAYER
+        if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening)
         {
-            Debug.Log("NETBasketballCart.TrySpawnBall: cooldown active");
+            Destroy(ball.gameObject);
             return;
         }
-        lastSpawnTime = Time.time;
-        Debug.Log("NETBasketballCart.TrySpawnBall: spawning ball now");
-        SpawnBall();
+
+        // 🔵 MULTIPLAYER
+        if (!IsServer)
+        {
+            RequestReturnServerRpc(ball.GetComponent<NetworkObject>().NetworkObjectId);
+            return;
+        }
+
+        ball.GetComponent<NetworkObject>().Despawn(true);
     }
 
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    void RequestReturnServerRpc(ulong ballNetId)
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestReturnServerRpc(ulong ballNetId)
     {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(ballNetId)) return;
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(ballNetId))
+            return;
+
         var nobj = NetworkManager.Singleton.SpawnManager.SpawnedObjects[ballNetId];
         nobj.Despawn(true);
     }

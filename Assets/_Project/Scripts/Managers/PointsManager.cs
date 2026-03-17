@@ -78,7 +78,7 @@ public class PointsManager : NetworkBehaviour
         UpdateClientPointsClientRpc(clientId, 0);
     }
 
-    // Cart-based scoring entry point
+    // Cart-based scoring entry point (mantener compatibilidad)
     public void AddBasketPoints(BasketballCart cart)
     {
         if (cart == null)
@@ -104,38 +104,36 @@ public class PointsManager : NetworkBehaviour
             clientId = netObj.OwnerClientId;
         }
 
-        AddBasketPointsForClient(clientId);
+        AddPointsForClient(clientId, pointsPerBasket);
     }
 
-    // INTERNAL scoring logic (unchanged)
-    private void AddBasketPointsForClient(ulong clientId)
+    // Nuevo: método público para sumar puntos a un clientId (server-only).
+    public void AddPointsForClient(ulong clientId, int points)
     {
-        // Allow single-player local updates when networking is not active.
         bool networkingActive = NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening;
 
+        // En red, sólo el servidor debe modificar el estado
         if (networkingActive && !IsServer)
         {
-            Debug.LogWarning("AddBasketPointsForClient should be called on server.");
+            Debug.LogWarning("AddPointsForClient should be called on server.");
             return;
         }
 
         if (!pointsPerClient.ContainsKey(clientId))
             pointsPerClient[clientId] = 0;
 
-        pointsPerClient[clientId] += pointsPerBasket;
+        pointsPerClient[clientId] += points;
 
         int newPoints = pointsPerClient[clientId];
 
         if (networkingActive)
         {
-            // notify all clients about updated points for this client
-            Debug.Log($"PointsManager: awarding {pointsPerBasket} to {clientId}, total {newPoints} (networked)");
+            Debug.Log($"PointsManager: awarding {points} to {clientId}, total {newPoints} (networked)");
             UpdateClientPointsClientRpc(clientId, newPoints);
         }
         else
         {
-            // single-player: invoke local event so UI updates
-            Debug.Log($"PointsManager: awarding {pointsPerBasket} to {clientId}, total {newPoints} (local)");
+            Debug.Log($"PointsManager: awarding {points} to {clientId}, total {newPoints} (local)");
             OnPointsChanged?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -144,7 +142,7 @@ public class PointsManager : NetworkBehaviour
     public void AddBasketPointsLocal()
     {
         // Treat local player as client 0
-        AddBasketPointsForClient(0);
+        AddPointsForClient(0, pointsPerBasket);
     }
 
     [ClientRpc]
@@ -172,6 +170,7 @@ public class PointsManager : NetworkBehaviour
         return 0;
     }
 
+    // Dos jugadores: devuelve el primer cliente distinto al local
     public int GetRivalPoints()
     {
         var all = Instance.GetAllPoints();

@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class Basketball : MonoBehaviour
+public class Basketball : NetworkBehaviour
 {
     [SerializeField] float timeToDespawn = 6f;
 
