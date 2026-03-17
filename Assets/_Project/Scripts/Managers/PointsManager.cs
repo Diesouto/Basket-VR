@@ -11,6 +11,9 @@ public class PointsManager : NetworkBehaviour
 
     [SerializeField] private int pointsPerBasket = 2;
 
+    // Exponer para que otros componentes puedan usar el valor configurado
+    public int PointsPerBasket => pointsPerBasket;
+
     // local cache of points per client
     private Dictionary<ulong, int> pointsPerClient = new Dictionary<ulong, int>();
 
@@ -107,12 +110,12 @@ public class PointsManager : NetworkBehaviour
         AddPointsForClient(clientId, pointsPerBasket);
     }
 
-    // Nuevo: método público para sumar puntos a un clientId (server-only).
+    // Nuevo: mï¿½todo pï¿½blico para sumar puntos a un clientId (server-only).
     public void AddPointsForClient(ulong clientId, int points)
     {
         bool networkingActive = NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening;
 
-        // En red, sólo el servidor debe modificar el estado
+        // En red, sï¿½lo el servidor debe modificar el estado
         if (networkingActive && !IsServer)
         {
             Debug.LogWarning("AddPointsForClient should be called on server.");

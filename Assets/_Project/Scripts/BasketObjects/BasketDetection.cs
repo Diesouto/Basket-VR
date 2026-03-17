@@ -56,8 +56,17 @@ public class BasketDetection : NetworkBehaviour
 
             if (cart != null && PointsManager.Instance != null)
             {
-                // PointsManager internamente valida que solo el servidor modifique puntos en red.
-                PointsManager.Instance.AddBasketPoints(cart);
+                // Award points to the client that owns the ball (ball owner may differ from cart owner)
+                var ballNetObj = ball.GetComponent<NetworkObject>();
+                if (ballNetObj != null)
+                {
+                    PointsManager.Instance.AddPointsForClient(ballNetObj.OwnerClientId, PointsManager.Instance.PointsPerBasket);
+                }
+                else
+                {
+                    // Fallback: keep backwards compatibility and award to cart owner
+                    PointsManager.Instance.AddBasketPoints(cart);
+                }
             }
         }
     }
@@ -92,7 +101,15 @@ public class BasketDetection : NetworkBehaviour
 
         if (cart != null && PointsManager.Instance != null)
         {
-            PointsManager.Instance.AddBasketPoints(cart);
+            var ballNetObj = ball.GetComponent<NetworkObject>();
+            if (ballNetObj != null)
+            {
+                PointsManager.Instance.AddPointsForClient(ballNetObj.OwnerClientId, PointsManager.Instance.PointsPerBasket);
+            }
+            else
+            {
+                PointsManager.Instance.AddBasketPoints(cart);
+            }
         }
     }
 
