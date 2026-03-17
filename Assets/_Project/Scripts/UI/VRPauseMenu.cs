@@ -3,23 +3,19 @@ using UnityEngine.InputSystem;
 
 public class VRPauseMenu : MonoBehaviour
 {
-    public GameObject pauseMenu;
-    public InputActionProperty pauseButton;
+    [SerializeField] Canvas pauseMenu;
+    [SerializeField] InputActionReference pauseButton;
 
-    private bool menuOpened = false;
+    bool menuOpened = false;
 
-    void Update()
+    private void Start()
     {
-        if (!menuOpened && pauseButton.action.WasPressedThisFrame())
-        {
-            OpenPauseMenu();
-        }
+        pauseButton.action.performed += PausePerformed;
     }
 
-    public void OpenPauseMenu()
+    private void PausePerformed(InputAction.CallbackContext obj)
     {
-        pauseMenu.SetActive(true);
-        Time.timeScale = 0f;
-        menuOpened = true;
+        menuOpened = !menuOpened;
+        pauseMenu.gameObject.SetActive(menuOpened);
     }
 }

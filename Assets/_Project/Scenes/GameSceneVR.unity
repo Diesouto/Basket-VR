@@ -1015,6 +1015,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 845784608}
   m_CullTransparentMesh: 1
+--- !u!223 &861188881 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 1269430202647358528, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+  m_PrefabInstance: {fileID: 8229792361465416482}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &876327155
 GameObject:
   m_ObjectHideFlags: 0
@@ -2456,6 +2461,10 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 752933019
       objectReference: {fileID: 0}
+    - target: {fileID: 237563077029616398, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: pauseMenu
+      value: 
+      objectReference: {fileID: 861188881}
     - target: {fileID: 293381548981666063, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -2507,6 +2516,14 @@ PrefabInstance:
     - target: {fileID: 8793069825717455411, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: m_Name
       value: VRPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060139356550121419, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: pauseButton
+      value: 
+      objectReference: {fileID: -4030727816006596680, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    - target: {fileID: 9060139356550121419, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: pauseButton.m_UseReference
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

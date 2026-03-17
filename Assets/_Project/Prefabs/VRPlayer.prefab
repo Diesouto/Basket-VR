@@ -3897,7 +3897,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3591011466483159017}
-  - component: {fileID: 237563077029616398}
   m_Layer: 5
   m_Name: PauseScreen
   m_TagString: Untagged
@@ -3930,39 +3929,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0.2015}
   m_SizeDelta: {x: 0.16, y: 0.403}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &237563077029616398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4891418929800814974}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a100a77e073d09c47b6c69b403e126af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::VRPauseMenu
-  pauseMenu: {fileID: 7086249830594511715}
-  pauseButton:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Pause Button
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 3ba08424-e03d-4c62-817a-29a5f60413b3
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings:
-      - m_Name: 
-        m_Id: cd363798-f589-45ee-a9f1-aa15e68b05af
-        m_Path: <XRController>{LeftHand}/devicePosition/x
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Pause Button
-        m_Flags: 0
-      m_Flags: 0
-    m_Reference: {fileID: 0}
 --- !u!1 &5295705457171179564
 GameObject:
   m_ObjectHideFlags: 0
@@ -4946,6 +4912,7 @@ GameObject:
   - component: {fileID: -4101766304534566987}
   - component: {fileID: -4057646217130544349}
   - component: {fileID: 7488247399918362849}
+  - component: {fileID: 9060139356550121419}
   m_Layer: 0
   m_Name: VRPlayer
   m_TagString: Player
@@ -5220,6 +5187,39 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   grabDistance: 3
+--- !u!114 &9060139356550121419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8793069825717455411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a100a77e073d09c47b6c69b403e126af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VRPauseMenu
+  pauseMenu: {fileID: 1269430202647358528}
+  pauseButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Pause Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 3ba08424-e03d-4c62-817a-29a5f60413b3
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: cd363798-f589-45ee-a9f1-aa15e68b05af
+        m_Path: <XRController>{LeftHand}/devicePosition/x
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Pause Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
 --- !u!1 &8991483709970374289
 GameObject:
   m_ObjectHideFlags: 0
