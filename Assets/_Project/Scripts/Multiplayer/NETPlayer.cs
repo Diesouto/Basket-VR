@@ -279,7 +279,7 @@ public class NETPlayer : NetworkBehaviour
         if (cart != null)
         {
             Debug.Log($"NETPlayer: requesting spawn from cart {cart.name}");
-            cart.RequestSpawnServerRpc();
+            //cart.SpawnRequestServerRpc();
         }
     }
 

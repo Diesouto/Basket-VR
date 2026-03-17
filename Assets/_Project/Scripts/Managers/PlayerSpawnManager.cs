@@ -6,12 +6,16 @@ public class PlayerSpawnManager : MonoBehaviour
 {
     [SerializeField] private Transform[] spawnPoints;
 
+    bool isUpdating = true;
+
     void Update()
     {
         if (!NetworkManager.Singleton.IsServer) return;
 
+        if (!isUpdating) return;
+
         // Stop once gameplay begins
-        if (GameManager.Instance.IsGamePlaying()) return;
+        if (GameManager.Instance.IsCountdownToStartActive()) isUpdating = false;
 
         var clients = NetworkManager.Singleton.ConnectedClientsList;
 

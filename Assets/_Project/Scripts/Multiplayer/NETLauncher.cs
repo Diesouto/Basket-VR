@@ -20,7 +20,7 @@ public class Launcher : MonoBehaviour
 
     private void Awake()
     {
-        if (FindObjectsOfType<Launcher>().Length > 1)
+        if (FindObjectsByType<Launcher>(FindObjectsSortMode.None).Length > 1)
         {
             Destroy(gameObject);
             return;
