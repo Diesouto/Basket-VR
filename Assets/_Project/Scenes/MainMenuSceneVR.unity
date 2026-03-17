@@ -3750,6 +3750,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8573834019959859332, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3231876883
+      objectReference: {fileID: 0}
+    - target: {fileID: 8573834019959859332, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 3836906956
+      objectReference: {fileID: 0}
     - target: {fileID: 8793069825717455411, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: m_Name
       value: VRPlayer
