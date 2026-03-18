@@ -2469,6 +2469,10 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1972069071}
+    - target: {fileID: 464137839134597645, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4734152495203355997, guid: 1c64247f392aa2f4f89298e772b9a5c1, type: 3}
       propertyPath: m_InteractionManager
       value: 
