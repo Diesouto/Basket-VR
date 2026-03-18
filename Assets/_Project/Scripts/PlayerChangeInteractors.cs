@@ -49,4 +49,10 @@ public class PlayerChangeInteractors : MonoBehaviour
             rightInteractor.gameObject.SetActive(false);
         }
     }
+
+    public void ToggleInteractors(bool isUIInteractorActive)
+    {
+        uiInteractor.gameObject.SetActive(isUIInteractorActive);
+        rightInteractor.gameObject.SetActive(!isUIInteractorActive);
+    }
 }

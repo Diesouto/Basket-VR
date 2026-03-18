@@ -21,6 +21,7 @@ public class VRPauseMenu : MonoBehaviour
     public void TogglePauseMenu()
     {
         menuOpened = !menuOpened;
+        gameObject.GetComponent<PlayerChangeInteractors>().ToggleInteractors(menuOpened);
         pauseMenu.gameObject.SetActive(menuOpened);
     }
 }
