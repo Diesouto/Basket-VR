@@ -76,7 +76,6 @@ public class BasketDetection : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void RequestScoreServerRpc(ulong ballNetId, ServerRpcParams rpcParams = default)
     {
-        Debug.Log($"Client requesting score for ball");
         if (!IsServer) return;
 
         if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(ballNetId, out var nobj))
