@@ -5,7 +5,7 @@ public class Basketball : NetworkBehaviour
 {
     [SerializeField] float timeToDespawn = 6f;
 
-    bool hasScored = false;
+    public NetworkVariable<bool> hasScored = new NetworkVariable<bool>();
     BasketballCart ownerCart;
 
     void OnEnable()
@@ -21,6 +21,7 @@ public class Basketball : NetworkBehaviour
     public void Initialize(BasketballCart cart)
     {
         ownerCart = cart;
+        hasScored.Value = false;
     }
 
     public BasketballCart GetOwnerCart()
@@ -30,17 +31,17 @@ public class Basketball : NetworkBehaviour
 
     public bool GetHasScored()
     {
-        return hasScored;
+        return hasScored.Value;
     }
 
     public void SetHasScored(bool value)
     {
-        hasScored = value;
+        hasScored.Value = value;
     }
 
     public void ResetBall()
     {
-        hasScored = false;
+        hasScored.Value = false;
 
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.linearVelocity = Vector3.zero;

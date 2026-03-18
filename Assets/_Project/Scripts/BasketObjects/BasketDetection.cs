@@ -76,6 +76,7 @@ public class BasketDetection : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void RequestScoreServerRpc(ulong ballNetId, ServerRpcParams rpcParams = default)
     {
+        Debug.Log($"Client requesting score for ball");
         if (!IsServer) return;
 
         if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(ballNetId, out var nobj))
@@ -86,7 +87,7 @@ public class BasketDetection : NetworkBehaviour
 
         // Validaci�n server-side: no doble scoring y que la velocidad Y sea negativa (hacia abajo)
         Rigidbody rb = ball.GetComponent<Rigidbody>();
-        if (ball.GetHasScored() || rb == null || rb.linearVelocity.y >= 0f)
+        if (ball.GetHasScored())
             return;
 
         ball.SetHasScored(true);
