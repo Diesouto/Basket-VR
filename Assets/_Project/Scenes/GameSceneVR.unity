@@ -1928,6 +1928,7 @@ GameObject:
   - component: {fileID: 1698570722}
   - component: {fileID: 1698570721}
   - component: {fileID: 1698570720}
+  - component: {fileID: 1698570723}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
@@ -2028,6 +2029,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1698570718}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1698570723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698570718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b8a6919f013df24c8481f8adb07447f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
+  collisionSound: {fileID: 8300000, guid: 8f2242cd753e3454e86de8053b64640c, type: 3}
+  audioSource: {fileID: 0}
 --- !u!1 &1919595078
 GameObject:
   m_ObjectHideFlags: 0

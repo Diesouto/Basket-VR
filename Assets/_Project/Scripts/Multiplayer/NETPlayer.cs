@@ -6,7 +6,11 @@ public class NETPlayer : NetworkBehaviour
 {
     [Header("Models")]
     [SerializeField] private GameObject playerModelHost;
+    [SerializeField] private GameObject rightHandModelHost;
+    [SerializeField] private GameObject leftHandModelHost;
     [SerializeField] private GameObject playerModelClient;
+    [SerializeField] private GameObject rightHandModelClient;
+    [SerializeField] private GameObject leftHandModelClient;
 
     [Header("Movement")]
     public float moveSpeed = 5f;
@@ -110,12 +114,22 @@ public class NETPlayer : NetworkBehaviour
         if (OwnerClientId == NetworkManager.ServerClientId)
         {
             playerModelHost.SetActive(true);
+            rightHandModelHost.SetActive(true);
+            leftHandModelHost.SetActive(true);
+
             playerModelClient.SetActive(false);
+            rightHandModelClient.SetActive(false);
+            leftHandModelClient.SetActive(false);
         }
         else
         {
             playerModelHost.SetActive(false);
+            rightHandModelHost.SetActive(false);
+            leftHandModelHost.SetActive(false);
+
             playerModelClient.SetActive(true);
+            rightHandModelClient.SetActive(true);
+            leftHandModelClient.SetActive(true);
         }
     }
 

@@ -435,6 +435,7 @@ GameObject:
   - component: {fileID: 2498137104203782141}
   - component: {fileID: 9130312759770249167}
   - component: {fileID: 1577861221487675455}
+  - component: {fileID: 1442898311745641548}
   m_Layer: 0
   m_Name: Detection
   m_TagString: Untagged
@@ -492,6 +493,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BasketDetection
   ShowTopMostFoldoutHeaderGroup: 1
   confettiParticles: {fileID: 3752827376240140365}
+--- !u!114 &1442898311745641548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7302796535483708119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b8a6919f013df24c8481f8adb07447f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
+  ShowTopMostFoldoutHeaderGroup: 1
+  collisionSound: {fileID: 8300000, guid: 41738c77c88840846b744c247bfe6d2b, type: 3}
+  audioSource: {fileID: 0}
+  minVelocityToPlay: 0.1
 --- !u!1 &8201392008798110423
 GameObject:
   m_ObjectHideFlags: 0
@@ -930,9 +947,15 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 3755903412343137839}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -3038580823966082976, guid: 8e2afd2b84754aa44ab2d16ca829f2af, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9105423013825416183}
     - targetCorrespondingSourceObject: {fileID: -2094279819090283801, guid: 8e2afd2b84754aa44ab2d16ca829f2af, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3268066790711692105}
+    - targetCorrespondingSourceObject: {fileID: -2094279819090283801, guid: 8e2afd2b84754aa44ab2d16ca829f2af, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1223257766051892234}
   m_SourcePrefab: {fileID: 100100000, guid: 8e2afd2b84754aa44ab2d16ca829f2af, type: 3}
 --- !u!4 &4537324332810246136 stripped
 Transform:
@@ -965,11 +988,48 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.014785511, y: 0.021177886, z: 0.02}
   m_Center: {x: 0, y: 8.881784e-16, z: 0}
+--- !u!114 &1223257766051892234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6598607520028410612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b8a6919f013df24c8481f8adb07447f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
+  ShowTopMostFoldoutHeaderGroup: 1
+  collisionSound: {fileID: 8300000, guid: b3d8c043ca3e77d4b9eda97ce67d0a61, type: 3}
+  audioSource: {fileID: 0}
+  minVelocityToPlay: 0.1
 --- !u!4 &6712373179988256703 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7231174453207914412, guid: 8e2afd2b84754aa44ab2d16ca829f2af, type: 3}
   m_PrefabInstance: {fileID: 4142582739513208851}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7829969589620009075 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -3038580823966082976, guid: 8e2afd2b84754aa44ab2d16ca829f2af, type: 3}
+  m_PrefabInstance: {fileID: 4142582739513208851}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9105423013825416183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7829969589620009075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b8a6919f013df24c8481f8adb07447f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
+  ShowTopMostFoldoutHeaderGroup: 1
+  collisionSound: {fileID: 8300000, guid: 614225399217bf547bfec68d6bd778d2, type: 3}
+  audioSource: {fileID: 0}
+  minVelocityToPlay: 0.1
 --- !u!1001 &6884309032572377911
 PrefabInstance:
   m_ObjectHideFlags: 0
