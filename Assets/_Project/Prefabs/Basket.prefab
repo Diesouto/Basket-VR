@@ -770,7 +770,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3573486437
+  GlobalObjectIdHash: 3135670814
   InScenePlacedSourceGlobalObjectIdHash: 3135670814
   DeferredDespawnTick: 0
   Ownership: 1
@@ -803,7 +803,7 @@ MonoBehaviour:
   minEventCooldownTime: 5
   maxEventCooldownTime: 10
   targetReachThreshold: 0.1
-  shakeIntensity: 0.2
+  shakeIntensity: 0.1
   movementBoundsSize: {x: 6, y: 4, z: 1.4}
 --- !u!114 &4454754020949711800
 MonoBehaviour:

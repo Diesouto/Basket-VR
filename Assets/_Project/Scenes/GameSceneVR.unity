@@ -2041,8 +2041,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b8a6919f013df24c8481f8adb07447f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
+  ShowTopMostFoldoutHeaderGroup: 1
   collisionSound: {fileID: 8300000, guid: 8f2242cd753e3454e86de8053b64640c, type: 3}
   audioSource: {fileID: 0}
+  minVelocityToPlay: 0.1
 --- !u!1 &1919595078
 GameObject:
   m_ObjectHideFlags: 0
@@ -2450,6 +2452,10 @@ PrefabInstance:
     - target: {fileID: 1476650536087955894, guid: 391adb6887e2a3f43acd4e1afc13376a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7646213787277447711, guid: 391adb6887e2a3f43acd4e1afc13376a, type: 3}
+      propertyPath: movementBoundsSize.y
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8568263029873898598, guid: 391adb6887e2a3f43acd4e1afc13376a, type: 3}
       propertyPath: GlobalObjectIdHash
