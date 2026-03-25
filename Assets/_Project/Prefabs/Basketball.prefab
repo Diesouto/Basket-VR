@@ -67,6 +67,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 471efa79b2ad83644b078895668449cd, type: 2}
+  - {fileID: 2100000, guid: 6cb66953e94e0b44b88115df26f6e61b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -100,9 +101,9 @@ GameObject:
   - component: {fileID: 6920816126012718818}
   - component: {fileID: 890789426374678526}
   - component: {fileID: 6283510209436164532}
+  - component: {fileID: 4890388818220582832}
   - component: {fileID: 3215410841587808334}
   - component: {fileID: 3272218579942192984}
-  - component: {fileID: 4890388818220582832}
   - component: {fileID: 4235148842431059906}
   - component: {fileID: 4672081697771322100}
   m_Layer: 6
@@ -176,6 +177,31 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &4890388818220582832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7492365920782512868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 209760918
+  InScenePlacedSourceGlobalObjectIdHash: 209760918
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &3215410841587808334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,6 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e48738efdb02aa447bd01626d9021111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Basketball
+  ShowTopMostFoldoutHeaderGroup: 1
   timeToDespawn: 6
 --- !u!114 &3272218579942192984
 MonoBehaviour:
@@ -316,31 +343,6 @@ MonoBehaviour:
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
   m_MaxAngularVelocityDelta: 20
---- !u!114 &4890388818220582832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7492365920782512868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2796067637
-  InScenePlacedSourceGlobalObjectIdHash: 209760918
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!114 &4235148842431059906
 MonoBehaviour:
   m_ObjectHideFlags: 0

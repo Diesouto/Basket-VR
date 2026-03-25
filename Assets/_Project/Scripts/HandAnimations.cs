@@ -19,5 +19,6 @@ public class HandAnimations : MonoBehaviour
         float triggerValue = triggerAction.action.ReadValue<float>();
         animator.SetFloat("Grip", gripValue);
         animator.SetFloat("Trigger", triggerValue);
+        Debug.Log("kk: " + animator.GetCurrentAnimatorClipInfo(0)[0].clip);
     }
 }
